@@ -1,11 +1,17 @@
+=======
 # Tahap I
 ## Nama-nama anggota kelompok
 1. Dien Fitrianii Azzahra (2206828033)
 2. Vincent Suhardi (2206082505)
-3. 
+3. Zaim Aydin Nazif (2206082524)
 
 ## Cerita aplikasi yang diajukan serta manfaatnya
-(nama aplikasi) adalah aplikasi yang menyediakan layanan perantara bagi penggunanya untuk saling meminjamkan dan meminjam buku yang disediakan di aplikasi. 
+
+**Deskripsi**
+Literaphile adalah sebuah *community library* dimana pengguna dapat meminjam buku dari daftar buku yang sudah ada maupun meminjamkan buku yang dia miliki (hanya yang ada pada daftar buku). Selain itu, pengguna juga dapat memberikan review terhadap buku yang telah Ia kembalikan.
+
+**Manfaat**
+Dengan adanya Literaphile, kami berharap tingkat literasi yang ada di Indonesia akan meningkat sedikit demi sedikit. Literaphile juga mengatasi permasalahan bagi seseorang yang tidak memiliki cukup dan auntuk membaca sebuah buku sekaligus menghindari penyesalan yang akan didapatkan jika buku yang dibelinya tidak sesuai harapannya. Aplikasi kami yang mendukung upaya untuk saling berbagi dapat memberikan motivasi bagi para pengguna untuk berkomunikasi dan menemukan suatu komunitas di dalam Literaphile. Kami berharap bahwa pengguna aplikasi dapat meningkatkan minat baca mereka dan menjadikan Literaphile sebagai ruangan perkembangan penalaran dan ilmu dalam diri.
 
 ## Daftar modul yang akan diimplementasikan
 1. Autentikasi
@@ -20,4 +26,5 @@
    User dapat memberikan ulasan terhadap buku yang ditampilkan di aplikasi
 
 ## Sumber dataset katalog buku
-Kelompok kami memilih untuk menggunakan Google Books API sebagai sumber dataset pembuatan aplikasi. Google Books API menyediakan fitur-fitur untuk menyelusuri berbagai macam kumpulan buku. Buku-buku yang diperoleh dari API tersebut memiliki _metadata_ atau informasi terkait dengan buku tersebut seperti judul, sinopsis, tanggal publikasi dan lain-lain. Selain itu, API ini juga memberikan _review_ berupa rating bintang atau teks biasa saja. Dengan luasnya data-data buku yang disediakan dan juga macam-macam fitur lainnya, Google Books API merupakan pilihan yang terbaik menurut kelompok kami.
+Kelompok kami memilih untuk menggunakan Google Books API sebagai sumber dataset pembuatan aplikasi. Google Books API menyediakan fitur-fitur untuk menyelusuri berbagai macam kumpulan buku. Buku-buku yang diperoleh dari API tersebut memiliki _metadata_ atau informasi terkait dengan buku tersebut seperti judul, sinopsis, tanggal publikasi, cover buku, dan lain-lain. Selain itu, API ini juga memberikan _review_ berupa rating bintang atau teks biasa saja. Dengan luasnya data-data buku yang disediakan dan juga macam-macam fitur lainnya, Google Books API merupakan pilihan yang terbaik menurut kelompok kami.
+
