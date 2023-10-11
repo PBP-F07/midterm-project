@@ -1,9 +1,10 @@
 =======
 # Tahap I
 ## Nama-nama anggota kelompok
-1. Dien Fitrianii Azzahra (2206828033)
-2. Vincent Suhardi (2206082505)
-3. Zaim Aydin Nazif (2206082524)
+1. Devandra Reswara Arkananta (2206083552)
+2. Dien Fitrianii Azzahra (2206828033)
+3. Vincent Suhardi (2206082505)
+4. Zaim Aydin Nazif (2206082524)
 
 ## Cerita aplikasi yang diajukan serta manfaatnya
 
