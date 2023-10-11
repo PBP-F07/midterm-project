@@ -1,4 +1,3 @@
-=======
 # Tahap I
 ## Nama-nama anggota kelompok
 1. Devandra Reswara Arkananta (2206083552)
@@ -9,10 +8,10 @@
 
 ## Cerita aplikasi yang diajukan serta manfaatnya
 
-**Deskripsi**
+<h5>Deskripsi</h5>
 Literaphile adalah sebuah *community library* dimana pengguna dapat meminjam buku dari daftar buku yang sudah ada maupun meminjamkan buku yang dia miliki (hanya yang ada pada daftar buku). Selain itu, pengguna juga dapat memberikan review terhadap buku yang telah Ia kembalikan.
 
-**Manfaat**
+<h5>Manfaat</h5>
 Dengan adanya Literaphile, kami berharap tingkat literasi yang ada di Indonesia akan meningkat sedikit demi sedikit. Literaphile juga mengatasi permasalahan bagi seseorang yang tidak memiliki cukup dan auntuk membaca sebuah buku sekaligus menghindari penyesalan yang akan didapatkan jika buku yang dibelinya tidak sesuai harapannya. Aplikasi kami yang mendukung upaya untuk saling berbagi dapat memberikan motivasi bagi para pengguna untuk berkomunikasi dan menemukan suatu komunitas di dalam Literaphile. Kami berharap bahwa pengguna aplikasi dapat meningkatkan minat baca mereka dan menjadikan Literaphile sebagai ruangan perkembangan penalaran dan ilmu dalam diri.
 
 ## Daftar modul yang akan diimplementasikan
@@ -23,7 +22,7 @@ Dengan adanya Literaphile, kami berharap tingkat literasi yang ada di Indonesia 
 3. Halaman Katalog Buku
    User dapat melakukan pencarian buku berdasarkan judulnya, dan melihat buku apa saja yang tersedia di aplikasi
 4. Detail Buku
-    User dapat melihat informasi detail mengenai buku, status ketersediaan buku dan terdapat 2 button yakni meminjam buku dan meminjamkan buku ke aplikasi
+   User dapat melihat informasi detail mengenai buku, status ketersediaan buku dan terdapat 2 button yakni meminjam buku dan meminjamkan buku ke aplikasi
 5. Mengulas buku
    User dapat memberikan ulasan terhadap buku yang ditampilkan di aplikasi
 
