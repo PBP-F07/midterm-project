@@ -5,6 +5,7 @@
 2. Dien Fitrianii Azzahra (2206828033)
 3. Vincent Suhardi (2206082505)
 4. Zaim Aydin Nazif (2206082524)
+5. Julian Alex Joshua (2206082606)
 
 ## Cerita aplikasi yang diajukan serta manfaatnya
 
