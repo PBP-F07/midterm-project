@@ -30,3 +30,11 @@ Admin dapat mengakses bagian ini, untuk melakukan penambahan terhadap buku yang 
 
 ## Sumber dataset katalog buku
 Kelompok kami memilih untuk menggunakan Google Books API sebagai sumber dataset pembuatan aplikasi. Google Books API menyediakan fitur-fitur untuk menyelusuri berbagai macam kumpulan buku. Buku-buku yang diperoleh dari API tersebut memiliki _metadata_ atau informasi terkait dengan buku tersebut seperti judul, sinopsis, tanggal publikasi, cover buku, dan lain-lain. Selain itu, API ini juga memberikan _review_ berupa rating bintang atau teks biasa saja. Dengan luasnya data-data buku yang disediakan dan juga macam-macam fitur lainnya, Google Books API merupakan pilihan yang terbaik menurut kelompok kami.
+
+## Roles
+
+#### Admin
+Admin diibaratkan seperti pengurus perpustakaan yang bertugas untuk memanajemen buku. Admin adalah user yang dapat melihat seluruh wishlist yang telah ditambahkan member. Kemudian, wishlist tersebut dapat diterima oleh admin dan menambahkannya ke katalog buku. User admin telah ditentukan oleh developer sehingga form register khusus diperuntukkan membuat member baru.
+
+#### Member
+Member dibuat melalui page register. Member dapat melihat halaman utama yang berisi katalog buku. Member dapat meminjam maupun mendonasikan buku yang ada pada katalog. Member juga dapat memberikan komentar pada sebuah buku ketika mengembalikan buku maupun ketika melihat detil buku. Member dapat membuat wishlist buku yang belum terdaftar pada katalog sehingga nantinya akan ditambahkan oleh admin.
