@@ -42,7 +42,7 @@ def login_user(request):
                 return HttpResponseRedirect(reverse('admin_page:show_main'))
             elif(user.groups.all()[0].name == 'member'):
                 # return HttpResponseRedirect(reverse('admin_page:show_main')) ini buat ke landing page
-                print('halo')
+                print('halo guys')
             else:
                 messages.info(request, 'Sorry, incorrect username or password. Please try again.')
     context = {}
