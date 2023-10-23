@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
@@ -34,16 +34,20 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.info(request, 'LOGIN SUCCESFUL') # sementara
             print(user.groups.all()[0])
 
-            #Nentuin member atau admin
+            # menentukan role member atau admin
             if(user.groups.all()[0].name == 'admin'):
+                # menuju ke admin page
                 return HttpResponseRedirect(reverse('admin_page:show_main'))
             elif(user.groups.all()[0].name == 'member'):
-                # return HttpResponseRedirect(reverse('admin_page:show_main')) ini buat ke landing page
-                print('halo guys')
+                # menuju ke landing page
+                return HttpResponseRedirect(reverse('landingPage:show_main'))
             else:
                 messages.info(request, 'Sorry, incorrect username or password. Please try again.')
     context = {}
     return render(request, 'login.html', context)
+
+def logout_user(request):
+    logout(request)
+    return redirect('authentication:login')
