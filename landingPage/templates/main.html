@@ -203,17 +203,17 @@
 </main>
 
 <script>
-  async function getProducts() {
+  async function getBooks() {
         return fetch("{% url 'landingPage:get_books_json' %}").then((res) => res.json())
   }
 
   async function refreshBooks() {
         document.getElementById("books_display").innerHTML = ""
-        const products = await getProducts()
+        const books = await getBooks()
         let counter = 0
 
         let htmlString = ``
-        products.forEach((item) => {
+        books.forEach((item) => {
             counter += 1
             htmlString += `\n
             <div class="col">
