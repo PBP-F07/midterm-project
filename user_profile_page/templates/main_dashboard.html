@@ -124,11 +124,9 @@
         </button>
         <hr>
         <h6>Borrowed Books</h6>
-        <ul>
-            {% for book in user_info.borrowed_books.all %}
-            <li>{{ book.title }} ({{ book.author }})</li>
-            {% endfor %}
-        </ul>
+        <hr>
+        <h6>Wishlisted Books</h6>
+        <div class="row" id="wishlist-list">
         <hr>
         <h6>
             <strong>Member of LiteraPhile</strong>
@@ -198,6 +196,25 @@
         const bioTextarea = document.getElementById("bioTextarea");
         bioTextarea.value = document.getElementById("bioContent").textContent;
     });
+
+    function loadWishlist() {
+        $.ajax({
+            url: "{% url 'wishlist_page:load_wishlist' %}",
+            method: "GET",
+            dataType: "json",  
+            success: function (data) {
+                $("#wishlist-list").empty();
+
+                data.wishlist.forEach(function (item) {
+                    $("#wishlist-list").append("<li>" + item.title + "</li>");
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+    loadWishlist();
     </script>
 
     

@@ -71,11 +71,12 @@ def get_books_json(request):
     books_item = Books.objects.all()
     return HttpResponse(serializers.serialize('json', books_item))
 
-
+@login_required
 def lend_book(request, book_id):
-    book = get_object_or_404(Books, id=book_id)
-    if book.borrowed_by:
-        return HttpResponse("Book already borrowed!", status=400)
-    book.borrowed_by = request.user
-    book.save()
-    return redirect('user_profile_page:user_dashboard')
+    if request.method == 'POST':
+        book = get_object_or_404(Books, id=book_id)
+        if book.borrowed_by:
+            return JsonResponse({'status': 'error', 'message': 'Book Already Borrowed'}, status=404)
+        book.borrowed_by = request.user
+        book.save()
+        return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully'})
