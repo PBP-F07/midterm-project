@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('administrator/', include('admin_page.urls')),
     path('wishlist/', include('wishlist_page.urls')),
+    path('user_profile/', include('user_profile_page.urls'))
 ]

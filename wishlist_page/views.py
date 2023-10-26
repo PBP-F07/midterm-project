@@ -32,7 +32,7 @@ def search_books(request):
                         'year_of_release': item['volumeInfo']['publishedDate'][:4] if 'publishedDate' in item['volumeInfo'] else '',
                     }
                     book_data.append(book_info)
-        return render(request, 'main_wishlist.html', {'book_data': book_data, 'user_wishlist': user_wishlist})
+            return render(request, 'main_wishlist.html', {'book_data': book_data, 'user_wishlist': user_wishlist})
     return render(request, 'main_wishlist.html', {'book_data': []})
 
 # fungsi untuk menambahkan buku ke wishlist

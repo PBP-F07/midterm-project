@@ -2,10 +2,15 @@ import requests
 import os
 import json
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from landingPage.models import Books
 from django.core import serializers
+from user_profile_page.models import Member
+from django.contrib.auth.decorators import login_required
+
+
+
 
 # Create your views here.
 counter = 0
@@ -65,3 +70,12 @@ def fetch_books(self): # untuk ngambil data langsung dari google api
 def get_books_json(request):
     books_item = Books.objects.all()
     return HttpResponse(serializers.serialize('json', books_item))
+
+
+def lend_book(request, book_id):
+    book = get_object_or_404(Books, id=book_id)
+    if book.borrowed_by:
+        return HttpResponse("Book already borrowed!", status=400)
+    book.borrowed_by = request.user
+    book.save()
+    return redirect('user_profile_page:user_dashboard')

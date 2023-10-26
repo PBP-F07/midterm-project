@@ -142,7 +142,7 @@
         </div>
         <div class="col-sm-4 offset-md-1 py-4">
           <ul class="list-unstyled">
-            <li><a href="#" class="text-white">User Profile</a></li>
+            <li><a href="{% url 'user_profile_page:user_dashboard' %}" class="text-white">User Profile</a></li>
           </ul>
         </div>
       </div>
@@ -233,7 +233,7 @@
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal${counter}">Details</button>
-                      <button type="button" class="btn btn-secondary">Pinjam</button>
+                      <button type="button" class="pinjam-button">Pinjam</button>
                     </div>
                     <small class="text-body-secondary">${item.fields.year_of_release}</small>
                   </div>
@@ -265,6 +265,7 @@
         
         document.getElementById("books_display").innerHTML = htmlString
     }
+
 
     refreshBooks()
 </script>
