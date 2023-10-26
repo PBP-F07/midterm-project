@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .b-example-divider {
+      width: 100%;
+      height: 3rem;
+      background-color: #090c9b;
+      border: solid rgba(0, 0, 0, .15);
+      border-width: 1px 0;
+      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 100vh;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      fill: currentColor;
+    }
+
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .btn-bd-primary {
+      --bd-violet-bg: #712cf9;
+      --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+      --bs-btn-font-weight: 600;
+      --bs-btn-color: var(--bs-white);
+      --bs-btn-bg: var(--bd-violet-bg);
+      --bs-btn-border-color: var(--bd-violet-bg);
+      --bs-btn-hover-color: var(--bs-white);
+      --bs-btn-hover-bg: #6528e0;
+      --bs-btn-hover-border-color: #6528e0;
+      --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+      --bs-btn-active-color: var(--bs-btn-hover-color);
+      --bs-btn-active-bg: #5a23c8;
+      --bs-btn-active-border-color: #5a23c8;
+    }
+
+    .bd-mode-toggle {
+      z-index: 1500;
+    }
+
+    .bd-mode-toggle .dropdown-menu .active .bi {
+      display: block !important;
+    }
+</style>
+{% endblock meta %}
+
+{% block content %}
+<div class="navbar navbar-dark bg-primary shadow-sm">
+    <div class="container">
+      <a href="#" class="navbar-brand d-flex align-items-center">
+        <strong>LiteraPhile</strong>
+      </a>
+
+      <!-- Logout Button -->
+      <a class="btn btn-danger" href="{% url 'authentication:logout' %}" role="button">Logout</a> 
+
+      <a class="d-flex align-items-center text-dark h5 fw-normal" style="text-decoration: none;">Halo, {{ name }}</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+    </div>
+</div>
+
+<h1>Details</h1>
+<br>
+<h5>{{book.title}}</h5>
+<br>
+<h3>{{user}}</h3>
+
+<table id="comments"></table>
+
+<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Book Details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form" onsubmit="return false;">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">Comment: </label>
+                        <input type="text" class="form-control" id="comment" name="comment"></input>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="button_add">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Details</button>
+
+<script>
+    async function getComments() {
+        const url = "get-comments/{{ book.pk }}"
+        return fetch(url).then((res) => res.json())
+    }
+
+    async function refreshComments(){
+        document.getElementById("comments").innerHTML="";
+        const comments = await getComments()
+        let htmlString=``
+        comments.forEach((comment) => {
+            
+            htmlString += `\n<tr>
+                    <td>${comment.fields.user}</td>
+                </tr>
+                
+                <tr>
+                    <td>${comment.fields.comment}</td>
+                </tr>            
+            `
+        });
+
+        document.getElementById("comments").innerHTML= htmlString
+    }
+
+    refreshComments()
+
+    function addComment(){
+        const url = "create-comment/{{ book.pk }}" 
+        fetch(url, {
+            method : "POST",
+            body: new FormData(document.querySelector("#form"))
+        }).then(refreshComments)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    document.getElementById("button_add").onclick = addComment
+
+</script>
+{% endblock content %}

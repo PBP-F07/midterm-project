@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'authentication',
     'admin_page',
     'landingPage',
-    'wishlist_page'
+    'wishlist_page',
+    'book_details',
 ]
 
 MIDDLEWARE = [
