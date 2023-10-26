@@ -285,13 +285,7 @@
                       </div>
                   </div>
               </div>
-              
-              document.addEventListener('click', function(e) {
-                if (e.target && e.target.classList.contains('btn-pinjam')) {
-                    let itemId = e.target.getAttribute('data-id');
-                    lend_book(itemId);
-                }
-              });
+
               
             </div>`
 
@@ -300,7 +294,12 @@
       document.getElementById("books_display").innerHTML = htmlString
     }
 
-    
+    document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('btn-pinjam')) {
+                let itemId = e.target.getAttribute('data-id');
+                lend_book(itemId);
+            }
+        });
 
     function lend_book(id) {
         fetch(`/lend_book/${id}/`, {
