@@ -5,13 +5,14 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from .models import WishlistItem
+from landingPage.views import get_books_json
 
 @login_required
 # fungsi untuk pencarian buku yang menggunakan google api
 def search_books(request):
     if request.method == 'POST':
         search_query = request.POST.get('search')
-        GOOGLE_BOOKS_API_KEY = os.environ.get('GOOGLE_BOOKS_API_KEY')
+        GOOGLE_BOOKS_API_KEY = 'AIzaSyDX3PLT7tAjUA0-ZLaSsfKVi1yS_CRp4PI'
         api_url = f'https://www.googleapis.com/books/v1/volumes?q={search_query}&key={GOOGLE_BOOKS_API_KEY}&maxResults=40'
         response = requests.get(api_url)
         data = response.json()
@@ -28,7 +29,7 @@ def search_books(request):
                         'title': title,
                         'author': ', '.join(item['volumeInfo']['authors']) if 'authors' in item['volumeInfo'] else 'Unknown Author',
                         'description': item['volumeInfo']['description'] if 'description' in item['volumeInfo'] else '',
-                        'image': item['volumeInfo']['imageLinks']['thumbnail'] if 'imageLinks' in item['volumeInfo'] else '',
+                        'image': item['volumeInfo']['imageLinks']['thumbnail'] if 'imageLinks' in item['volumeInfo'] else 'https://s3.amazonaws.com/media.muckrack.com/profile/images/317132/loudmouthjulia.jpeg.256x256_q100_crop-smart.jpg',
                         'year_of_release': item['volumeInfo']['publishedDate'][:4] if 'publishedDate' in item['volumeInfo'] else '',
                     }
                     book_data.append(book_info)
@@ -64,3 +65,4 @@ def load_wishlist(request):
         return JsonResponse({'wishlist': wishlist_data})
     else:
         return JsonResponse({'wishlist': []})
+
