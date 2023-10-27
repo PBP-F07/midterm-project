@@ -185,12 +185,16 @@
   </section>
 
   <div class="input-group d-flex justify-content-center w-50" style="margin: 0 auto;">
-    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-    <button type="button" class="btn btn-outline-primary">Search</button>
+    <input type="search" class="form-control rounded" id="searchInput" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+    <button type="button" class="btn btn-outline-primary" id="searchButton" onclick="searchBooks()">Search</button>
   </div>
 
   <div class="album py-5 bg-body-tertiary">
     <div class="container">
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="search_display">
+        
+      </div>
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="books_display">
         
@@ -211,29 +215,30 @@
 </main>
 
 <script>
-  async function getProducts() {
+  async function getBooks() {
         return fetch("{% url 'landingPage:get_books_json' %}").then((res) => res.json())
   }
 
   async function refreshBooks() {
         document.getElementById("books_display").innerHTML = ""
-        const products = await getProducts()
+        const books = await getBooks()
         let counter = 0
 
         let htmlString = ``
-        products.forEach((item) => {
+        books.forEach((item) => {
             counter += 1
             htmlString += `\n
             <div class="col">
               <div class="card shadow-sm">
-                <img src="${item.fields.image}" alt="Girl in a jacket" width="100%" height="225">
+                <img src="${item.fields.image}" alt="Girl in a jacket" width="100%" height="500">
                 <div class="card-body">
                   <p class="card-text">${item.fields.title}</p>
                   <p class="card-text">Author : ${item.fields.author}</p>
+                  <p class="card-text">Available : ${item.fields.amount}
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal${counter}">Details</button>
-                      <button type="button" class="btn btn-secondary">Pinjam</button>
+                      <button value="${counter}" type="button" class="btn btn-secondary">Pinjam</button>
                     </div>
                     <small class="text-body-secondary">${item.fields.year_of_release}</small>
                   </div>
@@ -267,6 +272,77 @@
     }
 
     refreshBooks()
+
+    function hide (elements) {
+        elements = elements.length ? elements : [elements];
+        for (var index = 0; index < elements.length; index++) {
+          elements[index].style.display = 'none';
+        }
+    }
+
+    async function get_search_books() {
+        let searchTitle = document.getElementById('searchInput').value
+        return fetch("{% url 'landingPage:search_books' %}?search_title=" + encodeURIComponent(searchTitle)).then((res) => res.json())
+    }
+
+    async function searchBooks() {
+        const books = await get_search_books()
+        console.log(books)
+
+        document.getElementById("search_display").innerHTML = ""
+        hide(document.getElementById("books_display"))
+        let counter = 0
+
+        let htmlString = ``
+        if(Array.isArray(books)) {
+            books.forEach((item) => {
+                counter += 1
+                htmlString += `\n
+                <div class="col">
+                  <div class="card shadow-sm">
+                    <img src="${item.fields.image}" alt="Girl in a jacket" width="100%" height="500">
+                    <div class="card-body">
+                      <p class="card-text">${item.fields.title}</p>
+                      <p class="card-text">Author : ${item.fields.author}</p>
+                      <p class="card-text">Available : ${item.fields.amount}
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal${counter}">Details</button>
+                          <button type="button" class="btn btn-secondary">Pinjam</button>
+                        </div>
+                        <small class="text-body-secondary">${item.fields.year_of_release}</small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal fade" id="exampleModal${counter}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabel">Book Details</h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                  <p>Title : ${item.fields.title}</p>
+                                  <p>Author : ${item.fields.author}</p>
+                                  <p>Release year/date : ${item.fields.year_of_release}</p>
+                                  <p>Description : </p>
+                                  <p>${item.fields.description}</p>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                </div>`
+            })
+        } else {
+          console.error('books is not an array:', books);
+        }
+        
+        document.getElementById("search_display").innerHTML = htmlString
+    }
 </script>
 
 <footer class="text-body-secondary py-5">

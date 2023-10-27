@@ -6,3 +6,4 @@ class Books(models.Model):
     description = models.TextField()
     image = models.CharField(max_length=255)
     year_of_release = models.CharField(max_length=10)
+    amount = models.IntegerField()
