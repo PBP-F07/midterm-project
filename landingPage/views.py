@@ -71,12 +71,14 @@ def get_books_json(request):
     books_item = Books.objects.all()
     return HttpResponse(serializers.serialize('json', books_item))
 
-@login_required
-def lend_book(request, book_id):
+from django.http import JsonResponse
+
+def borrow_book(request, book_title):
     if request.method == 'POST':
-        book = get_object_or_404(Books, id=book_id)
+        book = get_object_or_404(Books, title=book_title)
         if book.borrowed_by:
             return JsonResponse({'status': 'error', 'message': 'Book Already Borrowed'}, status=404)
+        # Retrieve user information from the POST request and update the book
         book.borrowed_by = request.user
         book.save()
         return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully'})

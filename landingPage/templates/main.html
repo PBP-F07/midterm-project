@@ -212,8 +212,18 @@
 
 <script>
   async function getProducts() {
-        return fetch("{% url 'landingPage:get_books_json' %}").then((res) => res.json())
-  }
+    return fetch("{% url 'landingPage:get_books_json' %}")
+      .then((res) => res.json())
+      .then((data) => {
+        // Check if the data contains books
+        if (Array.isArray(data)) {
+          data.forEach((book) => {
+            console.log('Primary Key:', book.pk);
+          });
+        }
+        return data; // Return the original data for further processing
+      });
+}
 
   async function refreshBooks() {
         document.getElementById("books_display").innerHTML = ""
@@ -232,8 +242,8 @@
                   <p class="card-text">Author : ${item.fields.author}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal${item.fields.pk}">Details</button>
-                      <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal1${item.fields.pk}">Pinjam</button>
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal${counter}">Details</button>
+                      <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal1${counter}">Pinjam</button>
 
                     </div>
                     <small class="text-body-secondary">${item.fields.year_of_release}</small>
@@ -241,7 +251,7 @@
                 </div>
               </div>
 
-              <div class="modal fade" id="exampleModal${item.fields.pk}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal fade" id="exampleModal${counter}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
                       <div class="modal-content">
                           <div class="modal-header">
@@ -262,24 +272,22 @@
                   </div>
               </div>
 
-              <div class="modal fade" id="exampleModal1${item.fields.pk}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+              <div class="modal fade" id="exampleModal1${counter}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
                   <div class="modal-dialog">
                       <div class="modal-content">
                           <div class="modal-header">
                               <h1 class="modal-title fs-5" id="exampleModalLabel1">Pinjam Details</h1>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>.
+                          </div>
                           <div class="modal-body">
-                              <p>Kamu akan meminjam buku: </p>
                               <p>Title : ${item.fields.title}</p>
                               <p>Author : ${item.fields.author}</p>
                               <p>Release year/date : ${item.fields.year_of_release}</p>
                               <p>Description : </p>
                               <p>${item.fields.description}</p>
-                              <p>Apakah kamu yakin akan meminjam?</p>
                           </div>
                           <div class="modal-footer">
-                              <button type="submit" class="btn-pinjam" data-id="${item.fields.pk}">Pinjam</button>
+                            <button type="button" class="btn btn-pinjam" data-bs-dismiss="modal" onclick="borrowBook(${item.fields.title})"> Pinjam </button>
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                           </div>
                       </div>
@@ -288,30 +296,31 @@
 
               
             </div>`
-
             
         })
       document.getElementById("books_display").innerHTML = htmlString
     }
 
-    document.addEventListener('click', function(e) {
-            if (e.target && e.target.classList.contains('btn-pinjam')) {
-                let itemId = e.target.getAttribute('data-id');
-                lend_book(itemId);
-            }
+    var csrf_token = "{{ csrf_token }}";
+    async function borrowBook(bookTitle) {
+      try {
+        const response = await fetch(`/landingPage/borrow_book/${bookTitle}/`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrf_token,  // You need to set the CSRF token here
+          },
         });
-
-    function lend_book(id) {
-        fetch(`/lend_book/${id}/`, {
-            method: 'POST',
-        })
-        .then(response => {
-            if (response.ok) {
-              return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully'})
-            } else {
-                console.error('Failed to delete item.');
-            }
-        });
+        const data = await response.json();
+        if (data.status === 'success') {
+          alert('Book borrowed successfully');
+          // Optionally, you can update the UI to indicate that the book is borrowed.
+          // For example, disable the "Pinjam" button or change its text.
+        } else {
+          alert(data.message);
+        }
+      } catch (error) {
+        alert(data.message);
+      }
     }
     refreshBooks()
 </script>
