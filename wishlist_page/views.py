@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from .models import WishlistItem
 from landingPage.views import get_books_json
+from landingPage.models import Books
 
 @login_required
 # fungsi untuk pencarian buku yang menggunakan google api
@@ -65,4 +66,6 @@ def load_wishlist(request):
         return JsonResponse({'wishlist': wishlist_data})
     else:
         return JsonResponse({'wishlist': []})
+    
+
 

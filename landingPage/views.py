@@ -8,6 +8,8 @@ from landingPage.models import Books
 from django.core import serializers
 from user_profile_page.models import Member
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 
@@ -71,11 +73,16 @@ def get_books_json(request):
     books_item = Books.objects.all()
     return HttpResponse(serializers.serialize('json', books_item))
 
+def show_json_by_id(request, id):
+    data = Books.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
 from django.http import JsonResponse
 
-def borrow_book(request, book_title):
+@csrf_exempt
+def borrow_book(request, id):
     if request.method == 'POST':
-        book = get_object_or_404(Books, title=book_title)
+        book = Books.objects.get(pk=id)
         if book.borrowed_by:
             return JsonResponse({'status': 'error', 'message': 'Book Already Borrowed'}, status=404)
         # Retrieve user information from the POST request and update the book

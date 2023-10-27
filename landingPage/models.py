@@ -8,4 +8,4 @@ class Books(models.Model):
     description = models.TextField()
     image = models.CharField(max_length=255)
     year_of_release = models.CharField(max_length=10)
-    borrowed_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='borrowed_books')
+    borrowed_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='borrowed_books', blank=True)

@@ -103,29 +103,24 @@
     
 
     <div class="content">
-        <h6>Profile</h6>
+        <h6>Books Check</h6>
         <hr>
         <h6>Username</h6>
         <div class="user_information">
-            <h6>
-                <strong>{{ user_info.username }}</strong>
-            </h6>
+            <h6><strong>{{ user_info.username }}</strong></h6>
         </div>
         <hr>
-        <h6>Bio</h6>
-        <div class="user_information">   
-            <p id="bioContent">
-                <strong>{{ user_bio }}</strong>
-            </p>
+        <h6>Borrowed Books</h6>
+        <div id="card-container" class="user_information">
+            <!-- Content will go here -->
         </div>
-        <button class="edit-button" data-toggle="modal" data-target="#editBioModal" id="editBioButton">
-            Edit
-        </button>
         <hr>
-        <h6>
-            <strong>Member of LiteraPhile</strong>
-        </h6>
+        <h6>Wishlisted Books</h6>
+        <div id="wishlisted_books_div" class="user_information">
+            <!-- Content will go here -->
+        </div>
     </div>
+    
     
     
 
@@ -154,29 +149,19 @@
 
     <script>
 
-    function updateBio() {
-        const bioTextarea = document.getElementById("bioTextarea");
-        const bio = bioTextarea.value;
-        const formattedBio = `<strong>${bio}</strong>`; // Wrap bio content with <strong> tags
-
-        fetch("{% url 'user_profile_page:update_bio_ajax' %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": getCookie("csrftoken"),
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: `bio=${encodeURIComponent(bio)}`,
-        })
-        .then(response => {
-            if (response.ok) {
-                document.getElementById("bioContent").innerHTML = formattedBio; // Set innerHTML to apply formatting
-                $('#editBioModal').modal('hide');
-            } else {
-                throw new Error("Failed to update bio");
-            }
-        })
-        .catch(error => console.error("Error:", error));
-    }
+    function return_book(bookId) {
+        fetch(`/return_book/${bookId}/`, {
+                    method: 'POST',
+                })
+                .then(response => {
+                    if (response.ok) {
+                    alert('Book returned successfully');
+                    refreshBooks();
+                    } else {
+                    alert(result.message);
+                    }
+                });
+        }
 
     // Function to get CSRF token from cookies
     function getCookie(name) {
@@ -190,6 +175,46 @@
         const bioTextarea = document.getElementById("bioTextarea");
         bioTextarea.value = document.getElementById("bioContent").textContent;
     });
+
+
+    async function getProducts() {
+        const res = await fetch("{% url 'user_profile_page:get_borrowed_books_json' %}");
+        const data = await res.json();
+        console.log("Received data:", data);
+        return data;
+    }
+
+    async function generateCards() {
+        const products = await getProducts();
+        const cardContainer = document.getElementById("card-container");
+
+        cardContainer.innerHTML = ""; // Clear existing cards
+
+        products.forEach((item) => {
+            const card = document.createElement("div");
+            card.className = "card border-dark mb-3 col-md-4";
+            card.innerHTML = `
+                <div class="card">
+                    <img src="${item.image}" class="card-img-top" alt="${item.title}">
+                    <div class="card-body">
+                        <h5 class="card-title">${item.title}</h5>
+                        <p class="card-text"><strong>Author:</strong> ${item.author}</p>
+                        <button class="return-button" data-toggle="modal" data-target="#returnModal" id="returnButton">
+                            Kembalikan
+                        </button>
+                        <!-- Add other book details as needed -->
+                    </div>
+                </div>
+            `;
+
+            cardContainer.appendChild(card);
+
+            // ...rest of your code
+        });
+    }
+
+    generateCards();
+    
     
     </script>
 

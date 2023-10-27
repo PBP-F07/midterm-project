@@ -8,6 +8,8 @@ from django.http import HttpResponse
 from landingPage.models import Books
 from user_profile_page.models import Member
 from wishlist_page.models import WishlistItem
+from django.core import serializers
+
 
 
 @login_required
@@ -18,11 +20,13 @@ def user_dashboard(request):
     member, created = Member.objects.get_or_create(user=user_info)
     user_bio = member.bio
     borrowed_books = Books.objects.filter(borrowed_by=user_info)
+    wishlisted_books = WishlistItem.objects.filter(user=user_info)
     
     context = {
         'user_info': user_info,
         'user_bio': user_bio,
         'borrowed_books': borrowed_books,
+        'wishlisted_books': wishlisted_books,
     }
 
     return render(request, 'main_dashboard.html', context)
@@ -34,6 +38,30 @@ def load_wishlist(request):
         return JsonResponse({'wishlist': wishlist_data})
     else:
         return JsonResponse({'wishlist': []})
+    
+
+def load_borrowed_book(request):
+    if request.user.is_authenticated:
+        books_items = Books.objects.filter(borrowed_by=request.user)
+        books_data = [{'title': item.title} for item in books_items]
+        return JsonResponse({'books': books_data})
+    else:
+        return JsonResponse({'books': []})
+    
+def borrowed_book_check_render(request):
+    user_info = request.user
+    member, created = Member.objects.get_or_create(user=user_info)
+    user_bio = member.bio
+    borrowed_books = Books.objects.filter(borrowed_by=user_info)
+    wishlisted_books = WishlistItem.objects.filter(user=user_info)
+    
+    context = {
+        'user_info': user_info,
+        'user_bio': user_bio,
+        'borrowed_books': borrowed_books,
+        'wishlisted_books': wishlisted_books,
+    }
+    return render(request, 'borrowed_book_check.html', context)
 
 @csrf_exempt
 def update_bio_ajax(request):
@@ -49,3 +77,23 @@ def update_bio_ajax(request):
         return HttpResponse(member.bio, status=201)
     
     return HttpResponseNotFound()
+
+def get_borrowed_books_json(request):
+    user_info = request.user
+    borrowed_books = Books.objects.filter(borrowed_by=user_info)
+    return HttpResponse(serializers.serialize('json', borrowed_books))
+
+def get_wishlisted_books_json(request):
+    user_info = request.user
+    wishlisted_books = WishlistItem.objects.filter(user=user_info)
+    return HttpResponse(serializers.serialize('json', wishlisted_books))
+
+
+def return_book(request, id):
+    if request.method == 'POST':
+        book = Books.objects.get(pk=id)
+        book.borrowed_by = None
+        book.save()
+        return JsonResponse({'status': 'success', 'message': 'Book returned successfully'})
+
+

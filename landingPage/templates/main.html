@@ -223,7 +223,7 @@
         }
         return data; // Return the original data for further processing
       });
-}
+  }
 
   async function refreshBooks() {
         document.getElementById("books_display").innerHTML = ""
@@ -287,7 +287,7 @@
                               <p>${item.fields.description}</p>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-pinjam" data-bs-dismiss="modal" onclick="borrowBook(${item.fields.title})"> Pinjam </button>
+                              <button type="button" class="btn btn-pinjam" data-bs-dismiss="modal" onclick="borrowBook(${item.pk})"> Pinjam </button>
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                           </div>
                       </div>
@@ -302,25 +302,18 @@
     }
 
     var csrf_token = "{{ csrf_token }}";
-    async function borrowBook(bookTitle) {
-      try {
-        const response = await fetch(`/landingPage/borrow_book/${bookTitle}/`, {
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': csrf_token,  // You need to set the CSRF token here
-          },
-        });
-        const data = await response.json();
-        if (data.status === 'success') {
-          alert('Book borrowed successfully');
-          // Optionally, you can update the UI to indicate that the book is borrowed.
-          // For example, disable the "Pinjam" button or change its text.
-        } else {
-          alert(data.message);
-        }
-      } catch (error) {
-        alert(data.message);
-      }
+    function borrowBook(bookId) {
+      fetch(`/borrow_book/${bookId}/`, {
+                method: 'POST',
+            })
+            .then(response => {
+                if (response.ok) {
+                  alert('Book borrowed successfully');
+                  refreshBooks();
+                } else {
+                  alert(result.message);
+                }
+            });
     }
     refreshBooks()
 </script>
