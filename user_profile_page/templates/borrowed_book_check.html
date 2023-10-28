@@ -1,0 +1,271 @@
+<head>
+    <title>User Dashboard</title>
+</head>
+
+<style>
+    .navbar-text {
+        color: #ffffff;
+        font-size: 24px;
+    }
+
+    .custom-sidebar {
+        background-color: #ffffff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 450px;
+        z-index: 1;
+        padding-top: 100px;
+        padding-right: 50px;
+        border-right: 2px solid black;
+        text-align: right;
+    }
+
+    .content {
+        margin-top: 30px;
+        margin-left: 500px;
+        padding: 20px;
+        font-weight:normal;
+    }
+
+    .navbar {
+        z-index: 2;
+    }
+
+    .content h6 {
+        margin-bottom: 10px;
+    }
+
+    .content .user_information {
+        padding-top: 5px;
+        padding-left: 15px;
+    }
+
+    .card-row {
+        display: flex;
+        flex-wrap: wrap;  /* Allows the items to wrap to the next line if the container width is exceeded */
+        gap: 20px;        /* Gap between each card */
+        justify-content: start; /* Align the cards to the start of the container */
+    }
+
+    .card {
+        max-width: 250px;
+        width: 250px;
+    }
+
+
+    /* CSS for the user_information class */
+    .user_information {
+        padding-top: 5px;
+        padding-left: 15px;
+    }
+
+
+    .edit-button {
+        background-color: #007bff;
+        color: #ffffff;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    
+
+</style>
+
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <!-- Navigation Bar -->
+    <div class="navbar navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a href="{% url 'landingPage:show_main' %}" class="navbar-brand d-flex align-items-center">
+            <strong>LiteraPhile</strong>
+            </a>
+    
+            <!-- Logout Button -->    
+    
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+    
+        </div>
+    </div>
+    
+    <div class="custom-sidebar">
+        <a class="navbar-brand" href="{% url 'user_profile_page:user_dashboard' %}" style="color: #000000;">
+            <strong>
+                Welcome, {{ user_info.username }}!
+            </strong>
+        </a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal" href="{% url 'user_profile_page:user_dashboard' %}" style="color: #000000;">User Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal" href="{% url 'user_profile_page:borrowed_book_check_render' %}" style="color: #000000;">Check For Books</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal" href="{% url 'landingPage:show_main' %}" style="color: #000000;">Return to Landing Page</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'authentication:logout' %}" style="color: #FF0800;">Logout</a>
+            </li>
+        </ul>
+    </div>
+    
+
+    <div class="content">
+        <h6>Books Check</h6>
+        <hr>
+        <h6>Username</h6>
+        <div class="user_information">
+            <h6><strong>{{ user_info.username }}</strong></h6>
+        </div>
+        <hr>
+        <h6>Borrowed Books</h6>
+        <div id="borrowed_books" class="user_information">
+            <!-- Content will go here -->
+        </div>        <hr>
+        <h6>Wishlisted Books</h6>
+        <div id="wishlisted_books" class="user_information">
+            <!-- Content will go here -->
+        </div>
+    </div>
+    
+    
+    
+
+    <div class="modal fade" id="editBioModal" tabindex="-1" aria-labelledby="editBioModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editBioModalLabel">Edit Bio</h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="bioForm" onsubmit="updateBio(); return false;">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="bioTextarea" class="col-form-label">Bio:</label>
+                            <textarea class="form-control" id="bioTextarea" name="bio"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function getWishlistedBooks() {
+            return fetch("{% url 'user_profile_page:get_wishlisted_books_json' %}").then((res) => res.json())
+        }
+
+        async function getBorrowedBooks() {
+            return fetch("{% url 'user_profile_page:get_borrowed_books_json' %}").then((res) => res.json())
+        }
+
+        
+
+        async function refreshWishlistedBooks() {
+            const cardContainer = document.getElementById("wishlisted_books");
+            cardContainer.innerHTML = "";
+            const books = await getWishlistedBooks();
+
+            const row = document.createElement("div");
+            row.className = "card-row"; // A new class for flexbox container
+
+            books.forEach((book) => {
+                const card = document.createElement("div");
+                card.className = "card border-dark mb-3";
+
+                card.innerHTML = `
+                    <img src="${book.fields.image}" class="card-img-top" alt="${book.fields.title}">
+                    <div class="card-body">
+                        <h5 class="card-title">${book.fields.title}</h5>
+                        <p class="card-text"><strong>Author:</strong> ${book.fields.author}</p>
+                            Kembalikan
+                        </button>
+                    </div>
+                `;
+
+                row.appendChild(card); // Append the card to the row
+            });
+
+            cardContainer.appendChild(row); // Append the row to the main container
+        }
+
+        async function refreshBorrowedBooks() {
+            const cardContainer = document.getElementById("borrowed_books");
+            cardContainer.innerHTML = "";
+            const books = await getBorrowedBooks();
+
+            const row = document.createElement("div");
+            row.className = "card-row"; // A new class for flexbox container
+
+            books.forEach((book) => {
+                const card = document.createElement("div");
+                card.className = "card border-dark mb-3";
+
+                card.innerHTML = `
+                    <img src="${book.fields.image}" class="card-img-top" alt="${book.fields.title}">
+                    <div class="card-body">
+                        <h5 class="card-title">${book.fields.title}</h5>
+                        <p class="card-text"><strong>Author:</strong> ${book.fields.author}</p>
+                        <p class="card-text"><strong>Return Date:</strong> ${book.fields.return_date}</p>
+                        <button class="return-button" data-toggle="modal" data-target="#returnModal" id="returnButton" onclick="returnBook(${book.pk})">
+                            Return
+                        </button>
+                        
+                    </div>
+                `;
+
+                row.appendChild(card); // Append the card to the row
+            });
+
+            cardContainer.appendChild(row); // Append the row to the main container
+        }
+
+
+
+        refreshBorrowedBooks()
+        refreshWishlistedBooks()
+
+
+        function returnBook(bookId) {
+            fetch(`/user_profile_page/return_book/${bookId}/`, {
+                        method: 'POST',
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                        alert('Book returned successfully');
+                        refreshBorrowedBooks();
+                        } else {
+                        alert(result.message);
+                        }
+                    });
+            }
+
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        document.getElementById("editBioButton").addEventListener("click", () => {
+            document.getElementById("form").reset();
+            const bioTextarea = document.getElementById("bioTextarea");
+            bioTextarea.value = document.getElementById("bioContent").textContent;
+        });
+    
+    
+    </script>
+
+    
+{% endblock content %}
