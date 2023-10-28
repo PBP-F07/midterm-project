@@ -2,6 +2,10 @@
 
 {% block meta %}
 <style>
+  main{
+    background-color: #01294d ;
+    color: #fdfdfd;
+  }
     .bd-placeholder-img {
       font-size: 1.125rem;
       text-anchor: middle;
@@ -78,6 +82,63 @@
     .bd-mode-toggle .dropdown-menu .active .bi {
       display: block !important;
     }
+
+    .container-detail {
+      display: block;
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 1300px;
+      height: 100px auto;
+      border: 1px solid #ccc;
+      border-radius: 5px ;
+      background-color: #fdfdfd;
+      color: #01294d;
+    }
+
+    .container-detail-book{
+      display: flex;
+      flex-wrap: wrap;
+      margin: 50px ;
+      width: auto;
+      height: auto;
+    }
+
+    #book-image{
+      width: 270px ;
+      height: 360px ;
+    }
+
+    .container-detail-comment{
+      display: flex;
+      margin: 20px auto;
+      padding: 20px;
+      width: 1200px;
+      height: 10px auto;
+      border-radius: 5px ;
+      background-color: #fdfdfd;
+      color: #01294d;
+    }
+
+    .user-username{
+      font-size: 130%;
+      color: #01294d;
+    }
+
+    .col-user{
+      display: flex;
+      width: auto;
+    }
+    .user-comment{
+      font-size: medium;
+      color: #03aec6;
+    }
+
+    .coment-divider{
+      width: 1191.01px;
+      height: 1px;
+      background-color: #000;
+    }
+    
 </style>
 {% endblock meta %}
 
@@ -91,7 +152,7 @@
       <!-- Logout Button -->
       <a class="btn btn-danger" href="{% url 'authentication:logout' %}" role="button">Logout</a> 
 
-      <a class="d-flex align-items-center text-dark h5 fw-normal" style="text-decoration: none;">Halo, {{ name }}</a>
+      <a class="d-flex align-items-center text-dark h5 fw-normal" style="text-decoration: none;">Halo, {{ user }}</a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -100,15 +161,38 @@
     </div>
 </div>
 
-<h1>Details</h1>
-<br>
-<h5>{{book.title}}</h5>
-<br>
-<h3>{{user}}</h3>
+<div class="container-detail">
+  <div class="row justify-content-md-center text-center">
+    <div class="row justify-content-md-center">
+      <h4>{{book.title}}</h4>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="container-detail-book ">
+      <img id="book-image" class="book-image" src="{{ book.image }}" alt="">
+    </div>
+  </div>
+  <div class="row">
+    <dl class="row">
+      <dt class="col-sm-2">Author: </dt>
+      <dd class="col-sm-10">{{book.author}}</dd>
+    
+      <dt class="col-sm-2">Published: </dt>
+      <dd class="col-sm-10">{{book.year_of_release}}</dd>
+    
+      <dt class="col-sm-2">Description: </dt>
+      <dd class="col-sm-10">{{book.description}}</dd>
+    
+    </dl>
+  </div>
+</div>
 
-<table id="comments"></table>
 
-<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="comments"></div>
+
+
+
+<div class="modal fade text-black" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -132,7 +216,7 @@
     </div>
 </div>
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Details</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Add Comment</button>
 
 <script>
     async function getComments() {
@@ -143,17 +227,47 @@
     async function refreshComments(){
         document.getElementById("comments").innerHTML="";
         const comments = await getComments()
+        const user = "{{user}}"
         let htmlString=``
         comments.forEach((comment) => {
             
-            htmlString += `\n<tr>
-                    <td>${comment.fields.user}</td>
-                </tr>
-                
-                <tr>
-                    <td>${comment.fields.comment}</td>
-                </tr>            
+          if(user == comment.fields.user ){
+            htmlString += `\n
+                <div class="container-detail">
+                  <div class="row">
+                    <div class="col-user">
+                      <p class="user-username fw-bold">${comment.fields.user}</p>
+                    </div>
+
+                    <div class="col">
+                      <p>{{date}}</p>  
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <p class="user-comment">
+                      ${comment.fields.comment}  
+                    </p>
+                    <a href="delete-comment/${comment.fields.book}/${comment.pk}">
+                      <button class="btn btn-danger">Delete</button>
+                    </a>
+                  </div>
+                </div>
             `
+          } else {
+            htmlString += `\n
+                <div class="container-detail">
+                  <p class="user-username fw-bold">
+                  ${comment.fields.user}  
+                  </p>
+
+                  <p class="user-comment">
+                    ${comment.fields.comment}  
+                  </p>
+                </div>
+            `
+          }
+            
         });
 
         document.getElementById("comments").innerHTML= htmlString
@@ -173,6 +287,8 @@
     }
 
     document.getElementById("button_add").onclick = addComment
+
+
 
 </script>
 {% endblock content %}
