@@ -68,6 +68,7 @@
         align-items: center;
         margin-right: auto;
     }
+    
 
     .card-footer {
         position: absolute;
@@ -185,6 +186,7 @@
                                     <input type="hidden" name="description" value="{{ book.description }}">
                                     <input type="hidden" name="image" value="{{ book.image }}">
                                     <input type="hidden" name="year_of_release" value="{{ book.year_of_release }}">
+                                    <input type="hidden" name="id" value="lalala">
                                     <button type="submit" class="btn btn-primary custom-button">Add to Wishlist</button>
                                 </form>
                             </div>
@@ -253,7 +255,7 @@
                 });
 
                 $("#confirmAddToWishlist").click(function () {
-                    $('#confirmationModal').modal('hide');
+                    
 
                     $.ajax({
                         url: "{% url 'wishlist_page:add_to_wishlist' %}",
@@ -263,6 +265,7 @@
                             $(".success-message").html("Book added to your wishlist!");
                             $(".success-message").show();
 
+
                             selectedBook.remove();
                             refreshWishlist();
                         },
@@ -270,23 +273,24 @@
                             console.error(error);
                         }
                     });
+                    $('#confirmationModal').modal('hide');
                 });
+            });
 
-                async function refreshWishlist() {
+            async function refreshWishlist() {
                     try {
                         const response = await fetch("{% url 'wishlist_page:load_wishlist' %}");
-                        const response2 = await fetch("{% url 'landingPage:get_books_json' %}");
+                        // const response2 = await fetch("{% url 'wishlist_page:get_book_status' %}");
                         if (!response.ok) {
                             throw new Error(`HTTP error! Status: ${response.status}`);
                         }
-                        if (!response2.ok) {
-                            throw new Error(`HTTP error! Status: ${response2.status}`);
-                        }
+                        // if (!response2.ok) {
+                        //     throw new Error(`HTTP error! Status: ${response2.status}`);
+                        // }
                         const data = await response.json();
-                        const avail = await response2.json();
+                        // const avail = await response2.json();
                         const wishlistData = data.wishlist;
-                        const bookData = avail.book;
-
+                        // const bookData = avail.wishlist;
 
                         document.getElementById("wishlist-table").innerHTML = "";
                         let htmlString = `
@@ -299,18 +303,15 @@
                         `;
 
                         wishlistData.forEach((item, index) => {
-                            const isBookAvailable = bookData && bookData.some((book) => book.title === item.title);
-                            console.log("hellooo")
-                            console.log(item.pk)
+                            console.log(wishlistData)
                             htmlString += `
                                 <tr>
                                     <td>${index + 1}</td>
                                     <td>${item.title}</td>
-                                    <td>sedang di req</td>
-                                    <td><button type="button" class="btn btn-danger" onclick="deleteProduct(${item.pk})">remove</button></td>
+                                    <td>${item.status}</td>
+                                    <td><button type="button" class="btn btn-danger" onclick="deleteProduct(${item.id})">remove</button></td>
                                 </tr>
                             `;
-
                         });
 
                         document.getElementById("wishlist-table").innerHTML = htmlString;
@@ -321,55 +322,7 @@
                 }
 
                 refreshWishlist()
-
-            });
-
-            async function refreshWishlist() {
-                    try {
-                        const response = await fetch("{% url 'wishlist_page:load_wishlist' %}");
-                        const response2 = await fetch("{% url 'landingPage:get_books_json' %}");
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        if (!response2.ok) {
-                            throw new Error(`HTTP error! Status: ${response2.status}`);
-                        }
-                        const data = await response.json();
-                        const avail = await response2.json();
-                        const wishlistData = data.wishlist;
-                        const bookData = avail.book;
-                        
-
-
-                        document.getElementById("wishlist-table").innerHTML = "";
-                        let htmlString = `
-                            <tr>
-                                <th>No.</th>
-                                <th>Judul</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        `;
-
-                        wishlistData.forEach((item, index) => {
-                            const isBookAvailable = bookData && bookData.some((book) => book.title === item.title);
-
-                            htmlString += `
-                                <tr>
-                                    <td>${index + 1}</td>
-                                    <td>${item.title}</td>
-                                    <td>sedang di req</td>
-                                    <td><button type="button" class="btn btn-danger" onclick="deleteProduct(${item.pk})">remove</button></td>
-                                </tr>
-                            `;
-                        });
-
-                        document.getElementById("wishlist-table").innerHTML = htmlString;
-                    } catch (error) {
-                        console.error('Error refreshing wishlist:', error);
-                        // Handle the error, e.g., display an error message to the user
-                    }
-                }
+                
             function deleteProduct(itemId) {
                     var myModal = new bootstrap.Modal(document.getElementById('confirmRemoveModal'));
                     myModal.show();
