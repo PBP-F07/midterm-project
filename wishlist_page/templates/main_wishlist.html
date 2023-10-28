@@ -1,85 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
-    <style>
-        body {
-            background-color: #b4c5e4;
-            color: #0f1842;
-        }
+<style>
+    table {
+        width: 100%;
+        border-collapse: separate;
+        /* Set to "separate" for distinct borders */
+        border: 2px solid #000000;
+        background-color: #150957;
+    }
 
-        .header {
-            text-align: center;
-            padding: 20px;
-        }
+    th,
+    td {
+        padding: 8px;
+        text-align: center;
+    }
 
-        .header h1 {
-            font-size: 2.5rem; /* Adjust the font size as needed */
-            margin: 0;
-        }
+    table tr {
+        background-color: #d3dafd;
+    }
 
-        .header p {
-            font-size: 1.2rem; /* Adjust the font size as needed */
-            margin: 0;
-        }
+    table tr:first-child {
+        background-color: #110f42;
+        color: #fff;
+    }
 
-        .card {
-            border: 3px solid #0f1842;
-            border-radius: 10px;
-            padding: 10px;
-            margin: 10px;
-            width: 20%; /* Set the width to a percentage of the container */
-            text-align: center;
-            display: inline-block;
-            align-items: center;
-        }
+    body {
+        background-color: #b4c5e4;
+        color: #0f1842;
+    }
 
-        
+    .header {
+        text-align: center;
+        padding: 20px;
+    }
 
-        .container-card {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between; /* Spread cards evenly within the container */
-            margin: 20px auto;
-            padding: 20px;
-            max-width: 1400px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.5);
-        }
-        
-        .custom-button.btn-primary {
-            color: #FFFFFF; 
-            outline-color: #090c9b; 
-            border-color: #090c9b; 
-            background-color: #090c9b;
-        }
+    .header h1 {
+        font-size: 2.5rem;
+        /* Adjust the font size as needed */
+        margin: 0;
+    }
 
-        .custom-button.btn-primary:hover {
-            color: #090c9b; 
-            background-color: #b4c5e4;
-        }
+    .header p {
+        font-size: 1.2rem;
+        /* Adjust the font size as needed */
+        margin: 0;
+    }
 
-        .custom-button2.btn-primary {
-            color: #090c9b; 
-            outline-color: #090c9b; 
-            border-color: #090c9b; 
-            background-color: #b4c5e4;
-        }
+    .card {
+        border: 3px solid #0f1842;
+        position: relative;
+        border-radius: 10px;
+        margin: 1px;
+        margin-bottom: 8px;
+        padding-top: 20px;
+        padding-bottom: 100px;
+        width: 200px;
+        /* Set the width to a percentage of the container */
+        text-align: center;
+        display: inline-block;
+        align-items: center;
+        margin-right: auto;
+    }
+    
 
-        .custom-button2.btn-primary:hover {
-            color: #090c9b; 
-            background-color: #91abda;
-        }
+    .card-footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: white;
+        /* Atur warna latar belakang sesuai kebutuhan */
+        padding: 10px;
+        /* Atur padding sesuai kebutuhan */
 
-        /* .books {
+    }
+
+    .card-footer form {
+        max-width: 100%;
+        /* Membatasi lebar form sesuai lebar kartu */
+    }
+
+    .wishlist-cards {
+        border: 5px solid #0f1842;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px;
+        width: 300px;
+        text-align: center;
+        display: inline-block;
+        align-items: center;
+
+
+    }
+
+    .container-card {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        /* Spread cards evenly within the container */
+        margin: 20px auto;
+        padding: 20px;
+        max-width: 1400px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .custom-button.btn-primary {
+        color: #FFFFFF;
+        outline-color: #090c9b;
+        border-color: #090c9b;
+        background-color: #090c9b;
+    }
+
+    .custom-button.btn-primary:hover {
+        color: #090c9b;
+        background-color: #b4c5e4;
+    }
+
+    .custom-button2.btn-primary {
+        color: #090c9b;
+        outline-color: #090c9b;
+        border-color: #090c9b;
+        background-color: #b4c5e4;
+    }
+
+    .custom-button2.btn-primary:hover {
+        color: #090c9b;
+        background-color: #91abda;
+    }
+
+    /* .books {
             font-style: 'Segoe UI';
         } */
-    </style>
+</style>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,113 +157,189 @@
     <div class="container">
         <div id="wishlist-section">
             <h2>My Wishlist</h2>
-            <div class="row" id="wishlist-list">
-        </div>
+            <table id="wishlist-table"></table>
+            </div>
             <div class="search">
-                    <h2 style="align-items: center;">Find Your Book</h2>
-                    <div class="search">
-                        <form action="{% url 'wishlist_page:search_books' %}" method="post" class="d-flex">
-                            {% csrf_token %}
-                                <input class="form-control me-2" type="text" name="search" placeholder="Enter Your Book Name" aria-label="Search">
-                                <button class="btn btn-primary custom-button2" type="submit">Search</button>
-                        </form>
-                    </div>
+                <h2 style="align-items: center;">Find Your Book</h2>
+                <div class="search">
+                    <form action="{% url 'wishlist_page:search_books' %}" method="post" class="d-flex">
+                        {% csrf_token %}
+                        <input class="form-control me-2" type="text" name="search" placeholder="Enter Your Book Name"
+                            aria-label="Search">
+                        <button class="btn btn-primary custom-button2" type="submit">Search</button>
+                    </form>
                 </div>
+            </div>
             <div class="container-card">
                 {% for book in book_data %}
                 <div class="card">
                     <img src="{{ book.image }}" alt="">
-                    <div class="books">
-                        <h3 class="title" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:medium">{{ book.title }}</h3>
-                        <p class="amount">{{ book.amount }}</p>
-                        <form class="add-to-wishlist-form" data-book-id="{{ book.unique_id }}">
-                            {% csrf_token %}
-                            <input type="hidden" name="title" value="{{ book.title }}">
-                            <input type="hidden" name="author" value="{{ book.author }}">
-                            <input type="hidden" name="description" value="{{ book.description }}">
-                            <input type="hidden" name="image" value="{{ book.image }}">
-                            <input type="hidden" name="year_of_release" value="{{ book.year_of_release }}">
-                            <button type="submit" class="btn btn-primary custom-button" >Add to Wishlist</button>
-                        </form>
+                    <div class="card-content">
+                        <div class="books">
+                            <h3 class="title" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:medium">{{ book.title }}</h3>
+                            <p class="amount">{{ book.amount }}</p>
+                            <div class="card-footer">
+                                <form class="add-to-wishlist-form" data-book-id="{{ book.unique_id }}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="title" value="{{ book.title }}">
+                                    <input type="hidden" name="author" value="{{ book.author }}">
+                                    <input type="hidden" name="description" value="{{ book.description }}">
+                                    <input type="hidden" name="image" value="{{ book.image }}">
+                                    <input type="hidden" name="year_of_release" value="{{ book.year_of_release }}">
+                                    <input type="hidden" name="id" value="lalala">
+                                    <button type="submit" class="btn btn-primary custom-button">Add to Wishlist</button>
+                                </form>
+                            </div>
+
+                        </div>
+
                     </div>
+
                 </div>
                 {% endfor %}
             </div>
-    </div>
+        </div>
 
-    <div class="modal" tabindex="-1" role="dialog" id="confirmationModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirmation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to add this book to your wishlist?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelAddToWishlist">No</button>
-                    <button type="button" class="btn btn-primary" id="confirmAddToWishlist">Yes</button>
+        <div class="modal" tabindex="-1" role="dialog" id="confirmationModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to add this book to your wishlist?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            id="cancelAddToWishlist">No</button>
+                        <button type="button" class="btn btn-primary" id="confirmAddToWishlist">Yes</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        $(document).ready(function () {
-            var selectedBook = null;
+        <div class="modal fade" id="confirmRemoveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Confirmation</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this item?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-primary" id="confirmDeleteBtn">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-            $(".add-to-wishlist-form").submit(function (event) {
-                event.preventDefault(); 
-                var form = $(this);
-                selectedBook = form.closest('.card'); 
-                $('#confirmationModal').modal('show');
-            });
+        <script>
+            $(document).ready(function () {
+                var selectedBook = null;
 
-            $("#cancelAddToWishlist").click(function () {
-                $('#confirmationModal').modal('hide');
-            });
+                $(".add-to-wishlist-form").submit(function (event) {
+                    event.preventDefault();
+                    var form = $(this);
+                    selectedBook = form.closest('.card');
+                    $('#confirmationModal').modal('show');
+                });
 
-            $("#confirmAddToWishlist").click(function () {
-                $('#confirmationModal').modal('hide');
+                $("#cancelAddToWishlist").click(function () {
+                    $('#confirmationModal').modal('hide');
+                });
 
-                $.ajax({
-                    url: "{% url 'wishlist_page:add_to_wishlist' %}",
-                    method: "POST",
-                    data: selectedBook.find('.add-to-wishlist-form').serialize(),
-                    success: function (response) {
-                        $(".success-message").html("Book added to your wishlist!");
-                        $(".success-message").show();
+                $("#confirmAddToWishlist").click(function () {
+                    
 
-                        selectedBook.remove();
-                        loadWishlist();
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(error);
-                    }
+                    $.ajax({
+                        url: "{% url 'wishlist_page:add_to_wishlist' %}",
+                        method: "POST",
+                        data: selectedBook.find('.add-to-wishlist-form').serialize(),
+                        success: function (response) {
+                            $(".success-message").html("Book added to your wishlist!");
+                            $(".success-message").show();
+
+
+                            selectedBook.remove();
+                            refreshWishlist();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                    $('#confirmationModal').modal('hide');
                 });
             });
 
-            function loadWishlist() {
-                $.ajax({
-                    url: "{% url 'wishlist_page:load_wishlist' %}",
-                    method: "GET",
-                    dataType: "json",  
-                    success: function (data) {
-                        $("#wishlist-list").empty();
+            async function refreshWishlist() {
+                    try {
+                        const response = await fetch("{% url 'wishlist_page:load_wishlist' %}");
+                        // const response2 = await fetch("{% url 'wishlist_page:get_book_status' %}");
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        // if (!response2.ok) {
+                        //     throw new Error(`HTTP error! Status: ${response2.status}`);
+                        // }
+                        const data = await response.json();
+                        // const avail = await response2.json();
+                        const wishlistData = data.wishlist;
+                        // const bookData = avail.wishlist;
 
-                        data.wishlist.forEach(function (item) {
-                            $("#wishlist-list").append("<li>" + item.title + "</li>");
+                        document.getElementById("wishlist-table").innerHTML = "";
+                        let htmlString = `
+                            <tr>
+                                <th>No.</th>
+                                <th>Judul</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        `;
+
+                        wishlistData.forEach((item, index) => {
+                            console.log(wishlistData)
+                            htmlString += `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${item.title}</td>
+                                    <td>${item.status}</td>
+                                    <td><button type="button" class="btn btn-danger" onclick="deleteProduct(${item.id})">remove</button></td>
+                                </tr>
+                            `;
                         });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(error);
+
+                        document.getElementById("wishlist-table").innerHTML = htmlString;
+                    } catch (error) {
+                        console.error('Error refreshing wishlist:', error);
+                        // Handle the error, e.g., display an error message to the user
                     }
-                });
-            }
-            loadWishlist();
-        });
-    </script>
+                }
+
+                refreshWishlist()
+                
+            function deleteProduct(itemId) {
+                    var myModal = new bootstrap.Modal(document.getElementById('confirmRemoveModal'));
+                    myModal.show();
+
+                    document.getElementById("confirmDeleteBtn").addEventListener("click", function() {
+                fetch(`delete-item-ajax/${itemId}/`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRFToken": document.querySelector('input[name="csrfmiddlewaretoken"]').value,
+                    },
+                })
+                        .then(refreshWishlist);
+
+                        myModal.hide();
+                    });
+                }
+
+        </script>
+
 </html>
