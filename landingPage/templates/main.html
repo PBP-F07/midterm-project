@@ -230,7 +230,7 @@
             htmlString += `\n
             <div class="col">
               <div class="card shadow-sm">
-                <img src="${item.fields.image}" alt="Girl in a jacket" width="100%" height="500">
+                <img src="${item.fields.image}" alt="Girl in a jacket" width="100%" height="100%">
                 <div class="card-body">
                   <p class="card-text">${item.fields.title}</p>
                   <p class="card-text">Author : ${item.fields.author}</p>
@@ -300,14 +300,14 @@
                 htmlString += `\n
                 <div class="col">
                   <div class="card shadow-sm">
-                    <img src="${item.fields.image}" alt="Girl in a jacket" width="100%" height="500">
+                    <img src="${item.fields.image}" alt="Girl in a jacket" width="100%" height="100%">
                     <div class="card-body">
                       <p class="card-text">${item.fields.title}</p>
                       <p class="card-text">Author : ${item.fields.author}</p>
                       <p class="card-text">Available : ${item.fields.amount}
                       <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal${counter}">Details</button>
+                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModals${counter}">Details</button>
                           <button type="button" class="btn btn-secondary">Pinjam</button>
                         </div>
                         <small class="text-body-secondary">${item.fields.year_of_release}</small>
@@ -315,7 +315,7 @@
                     </div>
                   </div>
 
-                  <div class="modal fade" id="exampleModal${counter}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal fade" id="exampleModals${counter}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog">
                           <div class="modal-content">
                               <div class="modal-header">

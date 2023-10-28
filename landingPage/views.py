@@ -83,15 +83,5 @@ def get_books_json(request):
 
 def search_books(request):
     search_title = request.GET.get('search_title', '')
-
-    # Query the database
     books_item = Books.objects.filter(title__icontains=search_title)
-
     return HttpResponse(serializers.serialize('json', books_item))
-
-    """
-    if request.is_ajax():
-        return JsonResponse(data)
-    else:
-        return render(request, 'book_search_results_ajax.html', {'data': data})
-    """
