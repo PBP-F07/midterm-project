@@ -1,7 +1,7 @@
 import hashlib
 import requests
 import os
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from .models import WishlistItem
@@ -65,8 +65,6 @@ def add_to_wishlist(request):
     return JsonResponse({'message': 'Invalid request method'}, status=400)
 
 # fungsi untuk menampilkan data wishlist user
-
-
 def load_wishlist(request):
     if request.user.is_authenticated:
         wishlist_items = WishlistItem.objects.filter(user=request.user)
@@ -80,9 +78,6 @@ def load_wishlist(request):
         return JsonResponse({'wishlist': wishlist_data})
     else:
         return JsonResponse({'wishlist': []})
-
-
-from django.http import JsonResponse
 
 def get_book_status(request, title):
     wishlists = WishlistItem.objects.filter(user=request.user)
@@ -99,3 +94,20 @@ def delete_item_ajax(request, id):
         product = WishlistItem.objects.get(id=id, user=request.user)
         product.delete()
         return HttpResponse(b"CREATED", status=201)
+    
+@csrf_exempt
+def add_book_ajax(request):
+    if request.method == 'POST':
+        user = request.user
+        title = request.POST.get("title")
+        author = request.POST.get("author")
+        description = request.POST.get("description")
+        image = request.POST.get("image")
+        year_of_release = request.POST.get("year_of_release")
+
+        new_book = WishlistItem(user=user, title=title, author=author, description=description, image=image, year_of_release=year_of_release)
+        new_book.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()

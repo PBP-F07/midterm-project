@@ -1,4 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <!DOCTYPE html>
+
 <html lang="en">
 <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
@@ -150,9 +154,10 @@
 
 <body>
     <div class="header">
+        {% load static %}
+        <img src="{% static 'wishlist-design.png' %}" alt="logo" style="display: block; margin: 0 auto;">
         <h1>Wishlist Page</h1>
-        <img src="logo.png" alt="logo">
-        <p>Temukan buku yang kamu inginkan disini!</p>
+        <p>Tambahkan buku yang kamu inginkan disini!</p>
     </div>
     <div class="container">
         <div id="wishlist-section">
@@ -343,3 +348,4 @@
         </script>
 
 </html>
+{% endblock content %}
