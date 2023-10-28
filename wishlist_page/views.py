@@ -12,10 +12,6 @@ from django.core import serializers
 
 @login_required
 # fungsi untuk pencarian buku yang menggunakan google api
-def show_json(request):
-    data = WishlistItem.objects.filter(user=request.user)
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
-
 def search_books(request):
     if request.method == 'POST':
         search_query = request.POST.get('search')
@@ -79,15 +75,7 @@ def load_wishlist(request):
     else:
         return JsonResponse({'wishlist': []})
 
-def get_book_status(request, title):
-    wishlists = WishlistItem.objects.filter(user=request.user)
-    
-    for bookUser in wishlists:
-        book_exists = Books.objects.filter(title=bookUser.title).exists()
-        status = "sudah ada" if book_exists else "belum ada"
-    return JsonResponse({"status": status})
-
-
+# fungsi untuk menghapus buku
 @csrf_exempt
 def delete_item_ajax(request, id):
     if request.method == 'DELETE':
@@ -95,6 +83,7 @@ def delete_item_ajax(request, id):
         product.delete()
         return HttpResponse(b"CREATED", status=201)
     
+# fungsi untuk menambah buku
 @csrf_exempt
 def add_book_ajax(request):
     if request.method == 'POST':
@@ -111,3 +100,7 @@ def add_book_ajax(request):
         return HttpResponse(b"CREATED", status=201)
 
     return HttpResponseNotFound()
+
+def show_json(request):
+    data = WishlistItem.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
