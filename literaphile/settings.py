@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authentication',
     'admin_page',
-    'landingPage'
+    'landingPage',
+    'wishlist_page'
 ]
 
 MIDDLEWARE = [
