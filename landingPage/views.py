@@ -9,6 +9,7 @@ from django.core import serializers
 from user_profile_page.models import Member
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from datetime import date
 
 
 
@@ -84,8 +85,10 @@ def borrow_book(request, id):
     if request.method == 'POST':
         book = Books.objects.get(pk=id)
         if book.borrowed_by:
-            return JsonResponse({'status': 'error', 'message': 'Book Already Borrowed'}, status=404)
+            return JsonResponse({'status': 'error', 'message': 'Someone has borrowed the book'}, status=404)
         # Retrieve user information from the POST request and update the book
         book.borrowed_by = request.user
+        book.borrowed_date = date.today()  # Save the current date as borrowed_date
+        book.is_borrowed = "Borrowed"
         book.save()
         return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully'})

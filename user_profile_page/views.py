@@ -9,6 +9,7 @@ from landingPage.models import Books
 from user_profile_page.models import Member
 from wishlist_page.models import WishlistItem
 from django.core import serializers
+import json
 
 
 
@@ -63,6 +64,20 @@ def borrowed_book_check_render(request):
     }
     return render(request, 'borrowed_book_check.html', context)
 
+def get_borrowed_books_json(request):
+    if request.user.is_authenticated:
+        borrowed_books = Books.objects.filter(borrowed_by=request.user)
+        data = serializers.serialize('json', borrowed_books)
+        struct = json.loads(data)
+        return JsonResponse(struct, safe=False)
+    
+def get_wishlisted_books_json(request):
+    if request.user.is_authenticated:
+        wishlisted_books = WishlistItem.objects.filter(user=request.user)
+        data = serializers.serialize('json', wishlisted_books)
+        struct = json.loads(data)
+        return JsonResponse(struct, safe=False)
+
 @csrf_exempt
 def update_bio_ajax(request):
     if request.method == 'POST':
@@ -78,22 +93,15 @@ def update_bio_ajax(request):
     
     return HttpResponseNotFound()
 
-def get_borrowed_books_json(request):
-    user_info = request.user
-    borrowed_books = Books.objects.filter(borrowed_by=user_info)
-    return HttpResponse(serializers.serialize('json', borrowed_books))
 
-def get_wishlisted_books_json(request):
-    user_info = request.user
-    wishlisted_books = WishlistItem.objects.filter(user=user_info)
-    return HttpResponse(serializers.serialize('json', wishlisted_books))
-
-
+@csrf_exempt
 def return_book(request, id):
     if request.method == 'POST':
         book = Books.objects.get(pk=id)
         book.borrowed_by = None
+        book.borrowed_date = None  # Reset the borrowed_date
+        book.return_date = None  # Reset the return_date
         book.save()
-        return JsonResponse({'status': 'success', 'message': 'Book returned successfully'})
+        return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully', 'is_borrowed': 'Borrowed'})
 
 
