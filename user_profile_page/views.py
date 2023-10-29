@@ -108,6 +108,7 @@ def return_book(request, id):
         book.borrowed_by = None
         book.borrowed_date = None  # Reset the borrowed_date
         book.return_date = None  # Reset the return_date
+        book.amount = book.amount+1
         book.save()
         return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully', 'is_borrowed': 'Borrowed'})
 

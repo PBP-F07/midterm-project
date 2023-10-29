@@ -68,7 +68,6 @@ def login_user(request):
             # menentukan role member atau admin
             if(user.groups.all()[0].name == 'admin'):
                 # menuju ke admin page
-                print("halo")
                 return HttpResponseRedirect(reverse('admin_page:show_main'))
             elif(user.groups.all()[0].name == 'member'):
                 # menuju ke landing page
