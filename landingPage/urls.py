@@ -5,7 +5,7 @@ from wishlist_page.views import search_books
 app_name = 'landingPage'
 
 urlpatterns = [
-    path('', show_main, name='show_main'),
+    path(' ', show_main, name='show_main'),
     path('get_books/', get_books_json, name='get_books_json'),
     path('search_books_static/', search_books_static, name='search_books_static'),
     path('borrow_book/<int:id>/', borrow_book, name='borrow_book'),
