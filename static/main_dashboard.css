@@ -24,9 +24,20 @@
     resize: none;  /* Disable resize */
 }
 
+
+.custom-content-area {
+    background-color: black;
+    color: white;
+}
+
+.edit-button {
+    background-color: white;
+    color: black;
+}
+
+
 .content {
     margin-top: 30px;
-    margin-left: 500px;
     padding: 20px;
     font-weight:normal;
 }

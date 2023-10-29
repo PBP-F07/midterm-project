@@ -4,17 +4,13 @@
 }
 
 .custom-sidebar {
-    background-color: #ffffff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 450px;
-    z-index: 1;
-    padding-top: 100px;
-    padding-right: 50px;
-    border-right: 2px solid black;
-    text-align: right;
+    width: 100%;
+    height: auto;
+    position: static; /* Resetting position */
+    padding-top: 20px; /* Reduced padding */
+    padding-right: 20px;
+    text-align: center; /* Centered text */
+    border-right: none; /* Removing border */
 }
 
 .content {
@@ -37,18 +33,54 @@
     padding-left: 15px;
 }
 
-.card-row {
-    display: flex;
-    flex-wrap: wrap;  /* Allows the items to wrap to the next line if the container width is exceeded */
-    gap: 20px;        /* Gap between each card */
-    justify-content: start; /* Align the cards to the start of the container */
-}
-
 .card {
-    max-width: 250px;
-    width: 250px;
+    max-width: 100%;
+    width: 100%;
 }
 
+.card-row {
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+/* Tablet and above */
+@media (min-width: 768px) {
+    .card {
+        max-width: calc(50% - 10px);  /* 50% of container width minus half of the gap */
+        width: calc(50% - 10px);
+    }
+    .card-row {
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .custom-sidebar {
+        width: 300px; /* Adjust width */
+        height: 100%;
+        position: absolute; /* Reset to original position */
+        top: 0;
+        left: 0;
+        bottom: 0;
+        padding-top: 100px; /* Original padding */
+        padding-right: 50px;
+        text-align: right; /* Reset text alignment */
+        border-right: 2px solid black; /* Reset border */
+    }
+}
+
+/* Desktop and above */
+@media (min-width: 1024px) {
+    .card {
+        max-width: calc(33.333% - 13.333px); /* 33.333% of container width minus a third of the gap */
+        width: calc(33.333% - 13.333px);
+    }
+
+    .custom-sidebar {
+        width: 450px; /* Even wider */
+        /* other styles can remain the same */
+    }
+}
 
 /* CSS for the user_information class */
 .user_information {
