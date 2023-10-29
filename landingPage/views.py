@@ -104,5 +104,6 @@ def borrow_book(request, id):
         book.borrowed_by = request.user
         book.borrowed_date = date.today()  # Save the current date as borrowed_date
         book.is_borrowed = "Borrowed"
+        book.amount = book.amount-1
         book.save()
         return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully'})

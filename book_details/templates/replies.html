@@ -2,125 +2,53 @@
 
 {% block meta %}
 <style>
-body{
-    background-color: #b4c5e4 ;
-    color: #090c9b;
+  body{
+      background-color: #b4c5e4 ;
+      color: #090c9b;
   }
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
+  .btn-bd-primary {
+    color: #FFFFFF;
+    outline-color: #090c9b;
+    border-color: #090c9b;
+    background-color: #090c9b;
+  }
 
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
-    }
+  .btn-bd-primary:hover {
+      color: #090c9b;
+      background-color: #b4c5e4;
+  }
 
-    .b-example-divider {
-      width: 100%;
-      height: 3rem;
-      background-color: #090c9b;
-      border: solid rgba(0, 0, 0, .15);
-      border-width: 1px 0;
-      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-    }
 
-    .b-example-vr {
-      flex-shrink: 0;
-      width: 1.5rem;
-      height: 100vh;
-    }
+  .container-detail {
+    display: block;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1300px;
+    height: 100px auto;
+    border: 2px solid #3c3744;
+    border-radius: 10px ;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #3c3744;
+  }
 
-    .bi {
-      vertical-align: -.125em;
-      fill: currentColor;
-    }
+  .user-username{
+    font-size: 140%;
+    color: #3c3744;
+  }
 
-    .nav-scroller {
-      position: relative;
-      z-index: 2;
-      height: 2.75rem;
-      overflow-y: hidden;
-    }
+  .col-user{
+    display: flex;
+    width: auto;
+  }
+  .user-comment{
+    font-size: medium;
+    color: #3c3744;
+  }
 
-    .nav-scroller .nav {
-      display: flex;
-      flex-wrap: nowrap;
-      padding-bottom: 1rem;
-      margin-top: -1px;
-      overflow-x: auto;
-      text-align: center;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .btn-bd-primary {
-      color: #FFFFFF;
-      outline-color: #090c9b;
-      border-color: #090c9b;
-      background-color: #090c9b;
-    }
-
-    .btn-bd-primary:hover {
-        color: #090c9b;
-        background-color: #b4c5e4;
-    }
-
-    .bd-mode-toggle {
-      z-index: 1500;
-    }
-
-    .bd-mode-toggle .dropdown-menu .active .bi {
-      display: block !important;
-    }
-
-    .container-detail {
-      display: block;
-      margin: 20px auto;
-      padding: 20px;
-      max-width: 1300px;
-      height: 100px auto;
-      border: 2px solid #3c3744;
-      border-radius: 10px ;
-      background-color: rgba(255, 255, 255, 0.5);
-      color: #3c3744;
-    }
-
-    .container-detail-book{
-      display: flex;
-      flex-wrap: wrap;
-      margin: 50px ;
-      width: auto;
-      height: auto;
-    }
-
-    #book-image{
-      width: 270px ;
-      height: 360px ;
-    }
-
-    .user-username{
-      font-size: 140%;
-      color: #3c3744;
-    }
-
-    .col-user{
-      display: flex;
-      width: auto;
-    }
-    .user-comment{
-      font-size: medium;
-      color: #3c3744;
-    }
-
-    .comment-date{
-      font-size: 80%;
-    }
-    
+  .comment-date{
+    font-size: 80%;
+  }
+  
 </style>
 {% endblock meta %}
 
