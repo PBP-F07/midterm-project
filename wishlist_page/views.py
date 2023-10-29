@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import WishlistItem
+from .models import WishlistItem, newWishlist
 from django.views.decorators.csrf import csrf_exempt
 from landingPage.models import Books
 from django.core import serializers
@@ -115,5 +115,5 @@ def add_book_ajax(request):
     return HttpResponseNotFound()
 
 def show_json(request):
-    data = WishlistItem.objects.filter(user=request.user)
+    data = newWishlist.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")

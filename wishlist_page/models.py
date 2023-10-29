@@ -12,6 +12,5 @@ class WishlistItem(models.Model):
     year_of_release = models.CharField(max_length=10)
 
 class newWishlist(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE) 
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
