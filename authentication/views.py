@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
+from landingPage.models import Books
+from landingPage.views import fetch_static_books
 
 
 
@@ -28,6 +30,10 @@ def register(request):
     return render(request, 'register.html', context)
 
 def login_user(request):
+
+    if (len(Books.objects.all()) == 0):
+        fetch_static_books()
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
