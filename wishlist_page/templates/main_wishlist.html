@@ -31,7 +31,7 @@
                         {% csrf_token %}
                         <input class="form-control me-2" type="text" name="search" placeholder="Masukkan judul bukumu"
                             aria-label="Search">
-                        <button class="btn btn-primary custom-button2" type="submit">Search</button>
+                        <button class="btn btn-primary custom-button2" type="submit">Cari</button>
                     </form>
                 </div>
             </div>
@@ -42,7 +42,6 @@
                     <div class="card-content">
                         <div class="books">
                             <h3 class="title" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:medium; margin: 10px;">{{ book.title }}</h3>
-                            <p class="amount">{{ book.amount }}</p>
                             <div class="card-footer">
                                 <form class="add-to-wishlist-form" data-book-id="{{ book.unique_id }}">
                                     {% csrf_token %}
@@ -101,7 +100,7 @@
             </div>
           </div>
 
-        <a href="{% url 'wishlist_page:create_notes' %}" class="btn btn-outline-info" style="color: #FFFFFF; outline-color: #273a7d; border-color: #273a7d; background-color: #273a7d;">
+        <a href="{% url 'wishlist_page:create_notes' %}" class="btn btn-outline-info" style="color: #FFFFFF; outline-color: #273a7d; border-color: #273a7d; background-color: #273a7d; align-items: center;">
             Berikan Catatan untuk Daftar Keinginanmu untuk LiteraPhile
         </a>
 
@@ -121,27 +120,28 @@
         });
 
         $("#confirmAddToWishlist").click(function () {
-            
-
-    $.ajax({
-        url: "{% url 'wishlist_page:add_to_wishlist' %}",
-        method: "POST",
-        data: selectedBook.find('.add-to-wishlist-form').serialize(),
-        success: function (response) {
-            $(".success-message").html("Book added to your wishlist!");
-            $(".success-message").show();
-
-
-                    selectedBook.remove();
-                    refreshWishlist();
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
-                }
-            });
-            $('#confirmationModal').modal('hide');
+            ajaxAddToWishlist(selectedBook);
         });
     });
+
+    function ajaxAddToWishlist(selectedBook) {
+        $.ajax({
+            url: "{% url 'wishlist_page:add_to_wishlist' %}",
+            method: "POST",
+            data: selectedBook.find('.add-to-wishlist-form').serialize(),
+            success: function (response) {
+                $(".success-message").html("Book added to your wishlist!");
+                $(".success-message").show();
+
+                selectedBook.remove();
+                refreshWishlist();
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+        $('#confirmationModal').modal('hide');
+    }
 
     async function refreshWishlist() {
         try {

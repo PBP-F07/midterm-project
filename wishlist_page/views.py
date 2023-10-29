@@ -1,12 +1,9 @@
-from audioop import reverse
-import hashlib
 import requests
-import os
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from .models import WishlistItem
-from landingPage.views import get_books_json
 from django.views.decorators.csrf import csrf_exempt
 from landingPage.models import Books
 from django.core import serializers
@@ -41,7 +38,7 @@ def search_books(request):
         return render(request, 'main_wishlist.html', {'book_data': book_data, 'user_wishlist': user_wishlist})
     return render(request, 'main_wishlist.html', {'book_data': []})
 
-# fungsi untuk menambahkan notes
+# fungsi untuk menambahkan notes wishlist
 def create_notes(request):
     form = BookForm(request.POST or None)
 
@@ -49,7 +46,7 @@ def create_notes(request):
         notes = form.save(commit=False)
         notes.user = request.user
         notes.save()
-        return HttpResponseRedirect(reverse('wishlist_page:main_wishlist'))
+        return HttpResponseRedirect(reverse('wishlist_page:search_books'))
     
     context = {'form': form}
     return render(request, "create_notes.html", context)
@@ -91,7 +88,7 @@ def load_wishlist(request):
     else:
         return JsonResponse({'wishlist': []})
 
-# fungsi untuk menghapus buku
+# fungsi untuk menghapus buku dengan AJAX
 @csrf_exempt
 def delete_item_ajax(request, id):
     if request.method == 'DELETE':
@@ -99,7 +96,7 @@ def delete_item_ajax(request, id):
         product.delete()
         return HttpResponse(b"CREATED", status=201)
     
-# fungsi untuk menambah buku
+# fungsi untuk menambah buku dengan AJAX
 @csrf_exempt
 def add_book_ajax(request):
     if request.method == 'POST':
