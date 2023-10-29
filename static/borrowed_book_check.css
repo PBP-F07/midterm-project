@@ -1,0 +1,66 @@
+.navbar-text {
+    color: #ffffff;
+    font-size: 24px;
+}
+
+.custom-sidebar {
+    background-color: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 450px;
+    z-index: 1;
+    padding-top: 100px;
+    padding-right: 50px;
+    border-right: 2px solid black;
+    text-align: right;
+}
+
+.content {
+    margin-top: 30px;
+    margin-left: 500px;
+    padding: 20px;
+    font-weight:normal;
+}
+
+.navbar {
+    z-index: 2;
+}
+
+.content h6 {
+    margin-bottom: 10px;
+}
+
+.content .user_information {
+    padding-top: 5px;
+    padding-left: 15px;
+}
+
+.card-row {
+    display: flex;
+    flex-wrap: wrap;  /* Allows the items to wrap to the next line if the container width is exceeded */
+    gap: 20px;        /* Gap between each card */
+    justify-content: start; /* Align the cards to the start of the container */
+}
+
+.card {
+    max-width: 250px;
+    width: 250px;
+}
+
+
+/* CSS for the user_information class */
+.user_information {
+    padding-top: 5px;
+    padding-left: 15px;
+}
+
+
+.edit-button {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
