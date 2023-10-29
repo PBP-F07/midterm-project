@@ -71,165 +71,170 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="container-detail">
-  <div class="row justify-content-md-center text-center">
-    <div class="row justify-content-md-center">
-      <h4>{{book.title}}</h4>
+<body>
+  <div class="container-detail">
+    <div class="row justify-content-md-center text-center">
+      <div class="row justify-content-md-center">
+        <h4>{{book.title}}</h4>
+      </div>
     </div>
+    <div class="row justify-content-center">
+      <div class="container-detail-book ">
+        <img id="book-image" class="book-image" src="{{ book.image }}" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <dl class="row">
+        <dt class="col-sm-2">Author: </dt>
+        <dd class="col-sm-10">{{book.author}}</dd>
+      
+        <dt class="col-sm-2">Published: </dt>
+        <dd class="col-sm-10">{{book.year_of_release}}</dd>
+      
+        <dt class="col-sm-2">Description: </dt>
+        <dd class="col-sm-10">{{book.description}}</dd>
+      
+      </dl>
+    </div>
+    <div class="row justify-content-md-center text-center ">
+      <div class="col-2">
+        <button type="button" class="btn btn-bd-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Add Comment</button>
+      </div>
+      <div class="col-2">
+        <a href="donate/{{ book.pk }}">
+          <button type="button" class="btn btn-bd-primary" data-bs-toggle="modal" data-bs-target="#commentModal">donate</button>
+        </a>
+      </div>
+    </div>    
   </div>
-  <div class="row justify-content-center">
-    <div class="container-detail-book ">
-      <img id="book-image" class="book-image" src="{{ book.image }}" alt="">
-    </div>
-  </div>
-  <div class="row">
-    <dl class="row">
-      <dt class="col-sm-2">Author: </dt>
-      <dd class="col-sm-10">{{book.author}}</dd>
-    
-      <dt class="col-sm-2">Published: </dt>
-      <dd class="col-sm-10">{{book.year_of_release}}</dd>
-    
-      <dt class="col-sm-2">Description: </dt>
-      <dd class="col-sm-10">{{book.description}}</dd>
-    
-    </dl>
-  </div>
-  <div class="row justify-content-md-center text-center ">
-    <div class="col-2">
-      <button type="button" class="btn btn-bd-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Add Comment</button>
-    </div>
-    <div class="col-2">
-      <a href="donate/{{ book.pk }}">
-        <button type="button" class="btn btn-bd-primary" data-bs-toggle="modal" data-bs-target="#commentModal">donate</button>
-      </a>
-    </div>
-  </div>    
-</div>
-
-
-
-<div id="comments"></div>
-
-
-
-<div class="modal fade text-black" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Comment</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="form" onsubmit="return false;">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="name" class="col-form-label">Comment: </label>
-                        <input type="text" class="form-control" id="comment" name="comment"></input>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-bd-primary" data-bs-dismiss="modal" id="button_add">Add</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<script>
-    async function getComments() {
-        const url = "get-comments/{{ book.pk }}"
-        return fetch(url).then((res) => res.json())
-    }
-
-    async function refreshComments(){
-        document.getElementById("comments").innerHTML="";
-        const comments = await getComments()
-        const user = "{{user}}"
-        let htmlString=``
-        comments.forEach((comment) => {
-            
-          if(user == comment.fields.user ){
-            htmlString += `\n
-            <div class="container-detail">
-              <div class="row">
-                <div class="col-user">
-                  <p class="user-username fw-bold">${comment.fields.user}</p>
-                </div>
+  
+  
+  
+  <div id="comments"></div>
+  
+  
+  
+  <div class="modal fade text-black" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Add Comment</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
+              <div class="modal-body">
+                  <form id="form" onsubmit="return false;">
+                      {% csrf_token %}
+                      <div class="mb-3">
+                          <label for="name" class="col-form-label">Comment: </label>
+                          <input type="text" class="form-control" id="comment" name="comment"></input>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-bd-primary" data-bs-dismiss="modal" id="button_add">Add</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+  
+  
+  <script>
+      async function getComments() {
+          const url = "get-comments/{{ book.pk }}"
+          return fetch(url).then((res) => res.json())
+      }
+  
+      async function refreshComments(){
+          document.getElementById("comments").innerHTML="";
+          const comments = await getComments()
+          const user = "{{user}}"
+          let htmlString=``
+          comments.forEach((comment) => {
               
-              <div class="row">
-                <p class="user-comment">
-                  ${comment.fields.comment}  
-                </p>
-              </div>
-
-              <div class="row comment-date">
-                <p>${comment.fields.date_added}</p>  
-              </div>
-
-              <div class="row">
-                <div class="col justify-content-md-center text-center">
-                  <a href="comments/${comment.pk}">
-                    <button class="btn btn-bd-primary">Replies</button>
-                  </a> 
-                  <a href="delete-comment/${comment.fields.book}/${comment.pk}">
-                    <button class="btn btn-danger">Delete</button>
-                  </a>
-                    
+            if(user == comment.fields.user ){
+              htmlString += `\n
+              <div class="container-detail">
+                <div class="row">
+                  <div class="col-user">
+                    <p class="user-username fw-bold">${comment.fields.user}</p>
+                  </div>
                 </div>
-              </div>
-            </div>`
-
-          } else {
-            htmlString += `\n
-            <div class="container-detail">
-              <div class="row">
-                <div class="col-user">
-                  <p class="user-username fw-bold">${comment.fields.user}</p>
+                
+                <div class="row">
+                  <p class="user-comment">
+                    ${comment.fields.comment}  
+                  </p>
                 </div>
-
-                <div class="col">
+  
+                <div class="row comment-date">
                   <p>${comment.fields.date_added}</p>  
                 </div>
-              </div>
+  
+                <div class="row">
+                  <div class="col justify-content-md-center text-center">
+                    <a href="comments/${comment.pk}">
+                      <button class="btn btn-bd-primary">Replies</button>
+                    </a>
+                    <a href="edit-comment/${comment.fields.book}/${comment.pk}">
+                      <button class="btn btn-bd-primary">Edit</button>
+                    </a> 
+                    <a href="delete-comment/${comment.fields.book}/${comment.pk}">
+                      <button class="btn btn-danger">Delete</button>
+                    </a>
+                  </div>
+                </div>
+              </div>`
+  
+            } else {
+              htmlString += `\n
+              <div class="container-detail">
+                <div class="row">
+                  <div class="col-user">
+                    <p class="user-username fw-bold">${comment.fields.user}</p>
+                  </div>
+  
+                  <div class="col">
+                    <p>${comment.fields.date_added}</p>  
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <p class="user-comment">
+                    ${comment.fields.comment}  
+                  </p>
+                </div>
+  
+                <div class="row justify-content-md-center text-center">
+                  <a href="comments/${comment.pk}">
+                    <button class="btn btn-bd-primary">Replies</button>
+                  </a>   
+                </div>
+              </div>`
+            }
               
-              <div class="row">
-                <p class="user-comment">
-                  ${comment.fields.comment}  
-                </p>
-              </div>
+          });
+  
+          document.getElementById("comments").innerHTML= htmlString
+      }
+  
+      refreshComments()
+  
+      function addComment(){
+          const url = "create-comment/{{ book.pk }}" 
+          fetch(url, {
+              method : "POST",
+              body: new FormData(document.querySelector("#form"))
+          }).then(refreshComments)
+  
+          document.getElementById("form").reset()
+          return false
+      }
+  
+      document.getElementById("button_add").onclick = addComment
+  
+  </script>
+</body>
 
-              <div class="row justify-content-md-center text-center">
-                <a href="comments/${comment.pk}">
-                  <button class="btn btn-bd-primary">Replies</button>
-                </a>   
-              </div>
-            </div>`
-          }
-            
-        });
-
-        document.getElementById("comments").innerHTML= htmlString
-    }
-
-    refreshComments()
-
-    function addComment(){
-        const url = "create-comment/{{ book.pk }}" 
-        fetch(url, {
-            method : "POST",
-            body: new FormData(document.querySelector("#form"))
-        }).then(refreshComments)
-
-        document.getElementById("form").reset()
-        return false
-    }
-
-    document.getElementById("button_add").onclick = addComment
-
-</script>
 {% endblock content %}

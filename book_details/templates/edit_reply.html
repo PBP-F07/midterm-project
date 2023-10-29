@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<style>
+  body{
+      background-color: #b4c5e4 ;
+      color: #090c9b;
+  }
+  .btn-bd-primary {
+    color: #FFFFFF;
+    outline-color: #090c9b;
+    border-color: #090c9b;
+    background-color: #090c9b;
+  }
+
+  .btn-bd-primary:hover {
+      color: #090c9b;
+      background-color: #b4c5e4;
+  }
+
+
+  .container-edit {
+    display: block;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1300px;
+    height: 100px auto;
+    border: 2px solid #3c3744;
+    border-radius: 10px ;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #3c3744;
+  }
+
+  .text-color{
+    font-size: 140%;
+    color: #3c3744;
+  }
+  
+</style>
+{% endblock meta %}
+
+{% block content %}
+
+<body>
+    <div class="container mt-4 container-edit">
+        <div class="editItem text-center">
+            <h1 class="text-color">Edit Reply</h1>
+            <form method="POST">
+                {% csrf_token %}
+                <table class="mx-auto">
+                    {{ form.as_table }}
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input class= "btn-bd-primary" type="submit" value="Edit Reply"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</body>
+{% endblock content %}
