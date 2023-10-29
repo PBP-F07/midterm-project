@@ -1,14 +1,13 @@
-import hashlib
 import requests
-import os
-from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
+from django.urls import reverse
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from .models import WishlistItem
-from landingPage.views import get_books_json
 from django.views.decorators.csrf import csrf_exempt
 from landingPage.models import Books
 from django.core import serializers
+from wishlist_page.forms import BookForm
 
 @login_required
 # fungsi untuk pencarian buku yang menggunakan google api
@@ -38,6 +37,20 @@ def search_books(request):
                     book_data.append(book_info)
         return render(request, 'main_wishlist.html', {'book_data': book_data, 'user_wishlist': user_wishlist})
     return render(request, 'main_wishlist.html', {'book_data': []})
+
+# fungsi untuk menambahkan notes wishlist
+def create_notes(request):
+    form = BookForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        notes = form.save(commit=False)
+        notes.user = request.user
+        notes.save()
+        return HttpResponseRedirect(reverse('wishlist_page:search_books'))
+    
+    context = {'form': form}
+    return render(request, "create_notes.html", context)
+
 
 # fungsi untuk menambahkan buku ke wishlist
 def add_to_wishlist(request):
@@ -75,7 +88,7 @@ def load_wishlist(request):
     else:
         return JsonResponse({'wishlist': []})
 
-# fungsi untuk menghapus buku
+# fungsi untuk menghapus buku dengan AJAX
 @csrf_exempt
 def delete_item_ajax(request, id):
     if request.method == 'DELETE':
@@ -83,7 +96,7 @@ def delete_item_ajax(request, id):
         product.delete()
         return HttpResponse(b"CREATED", status=201)
     
-# fungsi untuk menambah buku
+# fungsi untuk menambah buku dengan AJAX
 @csrf_exempt
 def add_book_ajax(request):
     if request.method == 'POST':

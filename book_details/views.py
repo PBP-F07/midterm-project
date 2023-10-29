@@ -52,6 +52,11 @@ def delete_reply(request,comment_id,id):
     replies.delete()
     return HttpResponseRedirect(reverse('book_details:replies',kwargs={"id": comment_id}))
 
+def delete_book_all(request):
+    book = Books.objects.all()
+    book.delete()
+    return HttpResponse(b"DELETED",status=201)
+
 @csrf_exempt
 def create_comment(requset,id):
     if requset.method == 'POST':

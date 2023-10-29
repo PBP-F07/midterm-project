@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import books_details,create_comment,get_comments,delete_comment, get_replies, replies, create_reply,delete_reply,donate
+from .views import books_details,create_comment,get_comments,delete_comment, get_replies, replies, create_reply,delete_reply,donate,delete_book_all
 
 app_name = 'book_details'
 
@@ -14,4 +14,5 @@ urlpatterns = [
     path('comments/create-reply/<int:id>', create_reply, name="create-reply"),
     path('comments/delete-reply/<int:comment_id>/<int:id>', delete_reply, name='delete_reply'),
     path('donate/<int:book_id>', donate , name='donate'),
+    path('delete-book-all/', delete_book_all , name = 'delete_book_all'),
 ]
