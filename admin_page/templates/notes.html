@@ -1,0 +1,39 @@
+{% extends 'admin.html' %}
+
+{% block meta %}
+
+    <style>
+
+        .user-table {
+            margin-left: 213px;
+            margin-top: 5px;
+        }
+
+    </style>
+
+{% endblock meta %}
+
+{% block content %}
+
+    <div class="user-table">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Judul Buku</th>
+                    <th>Penulis</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in notes %}
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock content %}

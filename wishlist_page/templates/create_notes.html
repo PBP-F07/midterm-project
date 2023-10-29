@@ -6,10 +6,6 @@
 
 {% block content %}
 <style>
-    
-
-
-    /* Perbaikan agar field input berada di dalam card */
     .card-body {
         padding: 20px;
     }
@@ -28,14 +24,14 @@
 
     body {
         background-image: url('https://i.pinimg.com/originals/b0/94/57/b094570b57a955fdccaf35eb1cc60058.jpg'); 
-        background-size: cover; /* Menyesuaikan ukuran gambar dengan halaman */
-        background-repeat: no-repeat; /* Menghindari pengulangan gambar */
-        background-attachment: fixed; /* Membuat gambar tetap di tempat saat menggulir */
+        background-size: cover; 
+        background-repeat: no-repeat;
+        background-attachment: fixed; 
         height: 100vh;
     }
 
     .card {
-        background-color: #fff; /* Warna latar belakang kartu (putih) */
+        background-color: #fff; 
         border: 1px solid #ccc;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -43,15 +39,13 @@
         margin: 0 auto;
     }
 
-   
-
     .btn-primary {
-        background-color: #090c9b !important; /* Warna pink untuk tombol */
+        background-color: #090c9b !important; 
         border-color: #090c9b !important;
     }
 
     .btn-primary:hover {
-        background-color: #91abda !important; /* Warna pink saat dihover */
+        background-color: #91abda !important; 
         border-color: #91abda !important;
     }
 
@@ -62,7 +56,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="text-center">Add Notes</h1>
+                    <h1 class="text-center">Form Permintaan Buku</h1>
                 </div>
                 <div class="card-body">
                     <form method="POST">
@@ -72,11 +66,14 @@
                             <tr>
                                 <td></td>
                                 <td>
-                                    <input type="submit" value="Add Notes" class="btn btn-primary">
+                                    <input type="submit" value="Kirim" class="btn btn-primary">
                                 </td>
                             </tr>
                         </table>
                     </form>
+                </div>
+                <div class="card-footer" style="text-align: center; margin-top: 20px;">
+                    <a href="{% url 'wishlist_page:search_books' %}">Kembali</a>
                 </div>
             </div>
         </div>

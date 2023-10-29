@@ -9,7 +9,9 @@ from landingPage.models import Books
 from user_profile_page.models import Member
 from wishlist_page.models import WishlistItem
 from django.core import serializers
+from landingPage.models import Books
 import json
+from .forms import MemberForm
 
 
 
@@ -22,12 +24,14 @@ def user_dashboard(request):
     user_bio = member.bio
     borrowed_books = Books.objects.filter(borrowed_by=user_info)
     wishlisted_books = WishlistItem.objects.filter(user=user_info)
+    form = MemberForm(instance=member)
     
     context = {
         'user_info': user_info,
         'user_bio': user_bio,
         'borrowed_books': borrowed_books,
         'wishlisted_books': wishlisted_books,
+        'form': form
     }
 
     return render(request, 'main_dashboard.html', context)
@@ -77,21 +81,24 @@ def get_wishlisted_books_json(request):
         data = serializers.serialize('json', wishlisted_books)
         struct = json.loads(data)
         return JsonResponse(struct, safe=False)
+    
+def delete_all_books(request):
+    books = Books.objects.all()
+    books.delete()
+    return HttpResponse(b"DELETED", status=200)
 
 @csrf_exempt
 def update_bio_ajax(request):
     if request.method == 'POST':
-        bio = request.POST.get("bio")
         user = request.user
-
-        # Update the bio in the Member model
         member, created = Member.objects.get_or_create(user=user)
-        member.bio = bio
-        member.save()
+        form = MemberForm(request.POST, instance=member)
 
-        return HttpResponse(member.bio, status=201)
-    
+        if form.is_valid():
+            form.save()
+            return HttpResponse(form.instance.bio, status=201)
     return HttpResponseNotFound()
+
 
 
 @csrf_exempt

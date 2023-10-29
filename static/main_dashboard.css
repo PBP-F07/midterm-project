@@ -1,0 +1,60 @@
+
+.navbar-text {
+    color: #ffffff;
+    font-size: 24px;
+}
+
+.custom-sidebar {
+    background-color: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 450px;
+    z-index: 1;
+    padding-top: 100px;
+    padding-right: 50px;
+    border-right: 2px solid black;
+    text-align: right;
+}
+
+#bioForm textarea {
+    width: 100%;  /* Adjust width */
+    height: 100px;  /* Adjust height */
+    resize: none;  /* Disable resize */
+}
+
+.content {
+    margin-top: 30px;
+    margin-left: 500px;
+    padding: 20px;
+    font-weight:normal;
+}
+
+.navbar {
+    z-index: 2;
+}
+
+.content h6 {
+    margin-bottom: 10px;
+}
+
+.content .user_information {
+    padding-top: 5px;
+    padding-left: 15px;
+}
+
+/* CSS for the user_information class */
+.user_information {
+    padding-top: 5px;
+    padding-left: 15px;
+}
+
+
+.edit-button {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
