@@ -10,3 +10,7 @@ class WishlistItem(models.Model):
     description = models.TextField()
     image = models.CharField(max_length=255)
     year_of_release = models.CharField(max_length=10)
+
+class Notes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    notes = models.TextField()

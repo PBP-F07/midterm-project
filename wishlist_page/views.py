@@ -1,7 +1,8 @@
+from audioop import reverse
 import hashlib
 import requests
 import os
-from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from .models import WishlistItem
@@ -9,6 +10,7 @@ from landingPage.views import get_books_json
 from django.views.decorators.csrf import csrf_exempt
 from landingPage.models import Books
 from django.core import serializers
+from wishlist_page.forms import BookForm
 
 @login_required
 # fungsi untuk pencarian buku yang menggunakan google api
@@ -38,6 +40,20 @@ def search_books(request):
                     book_data.append(book_info)
         return render(request, 'main_wishlist.html', {'book_data': book_data, 'user_wishlist': user_wishlist})
     return render(request, 'main_wishlist.html', {'book_data': []})
+
+# fungsi untuk menambahkan notes
+def create_notes(request):
+    form = BookForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        notes = form.save(commit=False)
+        notes.user = request.user
+        notes.save()
+        return HttpResponseRedirect(reverse('wishlist_page:main_wishlist'))
+    
+    context = {'form': form}
+    return render(request, "create_notes.html", context)
+
 
 # fungsi untuk menambahkan buku ke wishlist
 def add_to_wishlist(request):
