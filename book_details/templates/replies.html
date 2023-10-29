@@ -136,7 +136,6 @@
     .comment-date{
       font-size: 80%;
     }
-
     
 </style>
 {% endblock meta %}
@@ -160,55 +159,20 @@
     </div>
 </div>
 
-<div class="container-detail">
-  <div class="row justify-content-md-center text-center">
-    <div class="row justify-content-md-center">
-      <h4>{{book.title}}</h4>
-    </div>
-  </div>
-  <div class="row justify-content-center">
-    <div class="container-detail-book ">
-      <img id="book-image" class="book-image" src="{{ book.image }}" alt="">
-    </div>
-  </div>
-  <div class="row">
-    <dl class="row">
-      <dt class="col-sm-2">Author: </dt>
-      <dd class="col-sm-10">{{book.author}}</dd>
-    
-      <dt class="col-sm-2">Published: </dt>
-      <dd class="col-sm-10">{{book.year_of_release}}</dd>
-    
-      <dt class="col-sm-2">Description: </dt>
-      <dd class="col-sm-10">{{book.description}}</dd>
-    
-    </dl>
-  </div>
-  <div class="row justify-content-md-center text-center ">
-    <div class="col-2">
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Add Comment</button>
-    </div>
-  </div>    
-</div>
-
-
-<div id="comments"></div>
-
-
-
 <div class="modal fade text-black" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Comment</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Reply</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="form" onsubmit="return false;">
+
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="name" class="col-form-label">Comment: </label>
-                        <input type="text" class="form-control" id="comment" name="comment"></input>
+                        <label for="name" class="col-form-label">Reply: </label>
+                        <input type="text" class="form-control" id="reply" name="reply"></input>
                     </div>
                 </form>
             </div>
@@ -220,99 +184,120 @@
     </div>
 </div>
 
+<div class="container-detail">
+    <div class="row">
+      <div class="col-user">
+        <p class="user-username fw-bold">{{comment.user}}</p>
+      </div>
+    </div>
+    
+    <div class="row">
+      <p class="user-comment">
+        {{comment.comment}}  
+      </p>
+    </div>
+
+    <div class="row">
+        <p>{{comment.date_added}}</p>  
+    </div>
+    
+    <div class="row justify-content-md-center text-center">
+      <div class="col">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Reply</button>
+      </div>
+    </div>
+</div>
+
+<div id="replies"></div>
 
 
 <script>
-    async function getComments() {
-        const url = "get-comments/{{ book.pk }}"
+    async function getReplies() {
+        const url = "get-replies/{{ comment.pk }}"
         return fetch(url).then((res) => res.json())
     }
 
-    async function refreshComments(){
-        document.getElementById("comments").innerHTML="";
-        const comments = await getComments()
+    async function refreshReplies(){
+        document.getElementById("replies").innerHTML="";
+        const replies = await getReplies()
         const user = "{{user}}"
         let htmlString=``
-        comments.forEach((comment) => {
+        replies.forEach((reply) => {
             
-          if(user == comment.fields.user ){
+          if(user == reply.fields.user ){
             htmlString += `\n
-            <div class="container-detail">
-              <div class="row">
-                <div class="col-user">
-                  <p class="user-username fw-bold">${comment.fields.user}</p>
+                <div class="container-detail">
+                  <div class="row">
+                    <div class="col-user">
+                      <p class="user-username fw-bold">${reply.fields.user}</p>
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <p class="user-comment">
+                      ${reply.fields.replies}  
+                    </p>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col">
+                      <p>${reply.fields.date_add}</p>  
+                    </div>
+                  </div>
+                  <div class="row justify-content-md-center text-center">
+                    <class ="col">
+                      <a href="delete-reply/${reply.fields.comment}/${reply.pk}">
+                        <button class="btn btn-danger">Delete</button>
+                      </a>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              
-              <div class="row">
-                <p class="user-comment">
-                  ${comment.fields.comment}  
-                </p>
-              </div>
-
-              <div class="row comment-date">
-                <p>${comment.fields.date_added}</p>  
-              </div>
-
-              <div class="row">
-                <div class="col justify-content-md-center text-center">
-                  <a href="comments/${comment.pk}">
-                    <button class="btn btn-primary">Replies</button>
-                  </a> 
-                  <a href="delete-comment/${comment.fields.book}/${comment.pk}">
-                    <button class="btn btn-danger">Delete</button>
-                  </a>
-                    
-                </div>
-              </div>
-            </div>`
-
+            `
           } else {
             htmlString += `\n
-            <div class="container-detail">
-              <div class="row">
-                <div class="col-user">
-                  <p class="user-username fw-bold">${comment.fields.user}</p>
-                </div>
+                <div class="container-detail">
+                  <div class="row">
+                    <div class="col-user">
+                      <p class="user-username fw-bold">${reply.fields.user}</p>
+                    </div>
+                  </div>
 
-                <div class="col">
-                  <p>${comment.fields.date_added}</p>  
-                </div>
-              </div>
-              
-              <div class="row">
-                <p class="user-comment">
-                  ${comment.fields.comment}  
-                </p>
-              </div>
+                  <div class="row">
+                    <div class="col">
+                      <p>${reply.fields.date_add}</p>  
+                    </div>
+                  </div>
 
-              <div class="row justify-content-md-center text-center">
-                <a href="comments/${comment.pk}">
-                  <button class="btn btn-primary">Replies</button>
-                </a>   
-              </div>
-            </div>`
+                  <div class="row">
+                    <p class="user-comment">
+                      ${reply.fields.replies}  
+                    </p>
+                  </div>
+                </div>
+            `
           }
             
         });
 
-        document.getElementById("comments").innerHTML= htmlString
+        document.getElementById("replies").innerHTML= htmlString
     }
 
-    refreshComments()
+    refreshReplies()
 
-    function addComment(){
-        const url = "create-comment/{{ book.pk }}" 
+    function addReply(){
+        const url = "create-reply/{{ comment.pk }}" 
         fetch(url, {
             method : "POST",
             body: new FormData(document.querySelector("#form"))
-        }).then(refreshComments)
+        }).then(refreshReplies)
 
         document.getElementById("form").reset()
         return false
     }
 
-    document.getElementById("button_add").onclick = addComment
+    document.getElementById("button_add").onclick = addReply
+
+
 
 </script>
 {% endblock content %}
