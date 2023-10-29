@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from user_profile_page.views import load_wishlist, get_borrowed_books_json, get_wishlisted_books_json
+from user_profile_page.views import load_wishlist, get_borrowed_books_json, get_wishlisted_books_json, delete_all_books
 
 app_name = 'user_profile_page'
 
@@ -13,4 +13,6 @@ urlpatterns = [
     path('return_book/<int:id>/', views.return_book, name='return_book'),
     path('get_borrowed_books_json/', get_borrowed_books_json, name='get_borrowed_books_json'),
     path('get_wishlisted_books_json/', get_wishlisted_books_json, name='get_wishlisted_books_json'),
+    path('delete_all_books/', delete_all_books, name='delete_all_books'),
+
 ]
