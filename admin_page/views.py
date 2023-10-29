@@ -52,9 +52,12 @@ def show_managebooks(request):
     return render(request, "managebooks.html", context)
 
 def show_notes(request):
-    notes = newWishlist.objects.filter(user=request.user)
+    notes = newWishlist.objects.all()
+    groups = request.user.groups.all()
 
     context = {
+        'name': request.user.username,
+        'role': groups[0].name,
         'notes': notes
     }
     return render(request, "notes.html", context)
