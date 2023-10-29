@@ -1,3 +1,5 @@
+[![Deploy](https://github.com/PBP-F07/midterm-project/actions/workflows/pbp-deploy.yml/badge.svg)](https://github.com/PBP-F07/midterm-project/actions/workflows/pbp-deploy.yml)
+
 # Tahap I
 ## Nama-nama anggota kelompok
 1. Devandra Reswara Arkananta (2206083552)
