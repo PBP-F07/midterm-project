@@ -1,0 +1,145 @@
+{% extends 'admin.html' %}
+
+{% block meta %}
+
+    <style>
+
+        #manage-table, #search-input {
+            margin-left: 213px;
+            margin-top: 5px;
+        }
+
+        th, td {
+            font-size: 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    </style>
+
+{% endblock meta %}
+
+{% block content %}
+
+    <div class="input-group">
+        <form id="search-form">
+            <span style="display: flex;">
+                <input type="text" id="search-input" class="form-control" name="title" placeholder="Enter to search by title" style="display: inline-block; margin-right: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16" style="margin-top: 3px; margin-left: 5px;">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+            </span>
+        </form>
+    </div>
+
+    <table id="manage-table" class="table table-striped table-hover"></table>
+
+    <script>
+
+        // Function to refresh the table with all books
+        async function refreshBooks() {
+            const bookTable = document.getElementById("manage-table");
+            bookTable.innerHTML = "";
+            const allBooks = await getAllBooks();
+
+            let res = `
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Release Year</th>
+                    <th>Action</th>
+                </tr>
+            `;
+
+            allBooks.forEach((book) => {
+                res += `<tr>
+                    <td>${book.pk}</td>
+                    <td>${book.fields.title}</td>
+                    <td>${book.fields.author}</td>
+                    <td>${book.fields.year_of_release ? book.fields.year_of_release : 'Unknown'}</td>
+                    <td><button class="btn btn-danger button_delete" data-id="${book.pk}">Delete</button></td>
+                </tr>`;
+            });
+
+            bookTable.innerHTML = res;
+        }
+
+        // Function to search books based on title
+        async function searchBooks(title) {
+            const bookTable = document.getElementById("manage-table");
+            bookTable.innerHTML = "";
+            const searchResults = await searchBooksByTitle(title);
+
+            if (searchResults.length === 0) {                
+                bookTable.innerHTML = '<p style="margin-top: 10px;">No matching books found . . .</p>'
+            } else {
+                let res = `
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Release Year</th>
+                        <th>Action</th>
+                    </tr>
+                `;
+
+                searchResults.forEach((book) => {
+                    res += `<tr>
+                        <td>${book.id}</td>
+                        <td>${book.title}</td>
+                        <td>${book.author}</td>
+                        <td>${book.year_of_release ? book.year_of_release : 'Unknown'}</td>
+                        <td><button class="btn btn-danger button_delete" data-id="${book.id}">Delete</button></td>
+                    </tr>`;
+                });
+
+                bookTable.innerHTML = res;
+
+            }
+
+        }
+
+        // Function to handle form submission
+        document.getElementById("search-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const input = document.getElementById("search-input").value;
+
+            if (input) {
+                searchBooks(input);
+            } else {
+                refreshBooks();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            const input = document.getElementById("search-input").value;
+            if (e.target && e.target.classList.contains('button_delete')){
+                let itemId = e.target.getAttribute('data-id');
+                deleteBooks(itemId, input);
+            }
+        })
+
+        // Function to fetch all books from Django view
+        async function getAllBooks() {
+            return fetch("{% url 'admin_page:get_allbooks_json' %}").then((res) => res.json());
+        }
+
+        // Function to search books by title from Django view
+        async function searchBooksByTitle(title) {
+            return fetch(`{% url 'admin_page:get_book_by_title' %}?title=${title}`).then((res) => res.json());
+        }
+
+        // Initial load to show all books
+        refreshBooks();
+
+        function deleteBooks(id, title) {
+            fetch(`delete-book/${id}`, {
+                method: 'DELETE'
+            }).then(searchBooks(title))
+        }
+
+    </script>
+
+{% endblock content %}

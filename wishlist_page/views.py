@@ -1,21 +1,16 @@
-import hashlib
 import requests
-import os
-from django.http import HttpResponse, JsonResponse
+from django.urls import reverse
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from .models import WishlistItem
-from landingPage.views import get_books_json
 from django.views.decorators.csrf import csrf_exempt
 from landingPage.models import Books
 from django.core import serializers
+from wishlist_page.forms import BookForm
 
 @login_required
 # fungsi untuk pencarian buku yang menggunakan google api
-def show_json(request):
-    data = WishlistItem.objects.filter(user=request.user)
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
-
 def search_books(request):
     if request.method == 'POST':
         search_query = request.POST.get('search')
@@ -43,6 +38,20 @@ def search_books(request):
         return render(request, 'main_wishlist.html', {'book_data': book_data, 'user_wishlist': user_wishlist})
     return render(request, 'main_wishlist.html', {'book_data': []})
 
+# fungsi untuk menambahkan notes wishlist
+def create_notes(request):
+    form = BookForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        notes = form.save(commit=False)
+        notes.user = request.user
+        notes.save()
+        return HttpResponseRedirect(reverse('wishlist_page:search_books'))
+    
+    context = {'form': form}
+    return render(request, "create_notes.html", context)
+
+
 # fungsi untuk menambahkan buku ke wishlist
 def add_to_wishlist(request):
     if request.method == 'POST':
@@ -65,8 +74,6 @@ def add_to_wishlist(request):
     return JsonResponse({'message': 'Invalid request method'}, status=400)
 
 # fungsi untuk menampilkan data wishlist user
-
-
 def load_wishlist(request):
     if request.user.is_authenticated:
         wishlist_items = WishlistItem.objects.filter(user=request.user)
@@ -81,21 +88,32 @@ def load_wishlist(request):
     else:
         return JsonResponse({'wishlist': []})
 
-
-from django.http import JsonResponse
-
-def get_book_status(request, title):
-    wishlists = WishlistItem.objects.filter(user=request.user)
-    
-    for bookUser in wishlists:
-        book_exists = Books.objects.filter(title=bookUser.title).exists()
-        status = "sudah ada" if book_exists else "belum ada"
-    return JsonResponse({"status": status})
-
-
+# fungsi untuk menghapus buku dengan AJAX
 @csrf_exempt
 def delete_item_ajax(request, id):
     if request.method == 'DELETE':
         product = WishlistItem.objects.get(id=id, user=request.user)
         product.delete()
         return HttpResponse(b"CREATED", status=201)
+    
+# fungsi untuk menambah buku dengan AJAX
+@csrf_exempt
+def add_book_ajax(request):
+    if request.method == 'POST':
+        user = request.user
+        title = request.POST.get("title")
+        author = request.POST.get("author")
+        description = request.POST.get("description")
+        image = request.POST.get("image")
+        year_of_release = request.POST.get("year_of_release")
+
+        new_book = WishlistItem(user=user, title=title, author=author, description=description, image=image, year_of_release=year_of_release)
+        new_book.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+
+def show_json(request):
+    data = WishlistItem.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")

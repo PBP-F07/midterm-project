@@ -144,44 +144,6 @@
       </ul>
     </div>
 
-    
-<header data-bs-theme="dark">
-  <div class="collapse text-bg-dark" id="navbarHeader">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-8 col-md-7 py-4">
-          <h4>About</h4>
-          <p class="text-body-secondary">Kami kelompok PBP F07 dengan anggota : Vincent, Julian, Evan, Zaim, dan Dien</p>
-        </div>
-        <div class="col-sm-4 offset-md-1 py-4">
-          <ul class="list-unstyled">
-            <li><a href="{% url 'user_profile_page:user_dashboard' %}" class="text-white">User Profile</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Navigation Bar -->
-  <div class="navbar navbar-dark bg-primary shadow-sm">
-    <div class="container">
-      <a href="#" class="navbar-brand d-flex align-items-center">
-        <strong>LiteraPhile</strong>
-      </a>
-
-      <!-- Logout Button -->
-      <a class="btn btn-danger" href="{% url 'authentication:logout' %}" role="button">Logout</a> 
-
-      <a class="d-flex align-items-center text-dark h5 fw-normal" style="text-decoration: none;">Halo, {{ name }}</a>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-    </div>
-  </div>
-</header>
-
 <main>
 
   <section class="py-5 text-center container">
@@ -190,7 +152,7 @@
         <h1 class="fw-light">LiteraPhile</h1>
         <p class="lead text-body-secondary">Aplikasi peminjaman buku No 1 di Fasilkom</p>
         <p>
-          <a href="#" class="btn btn-primary my-2">Main call to action</a>
+          <a href="{% url 'wishlist_page:search_books' %}" class="btn btn-primary my-2">Tambahkan Wishlist</a>
           <a href="#" class="btn btn-secondary my-2">Secondary action</a>
         </p>
       </div>
@@ -198,12 +160,16 @@
   </section>
 
   <div class="input-group d-flex justify-content-center w-50" style="margin: 0 auto;">
-    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-    <button type="button" class="btn btn-outline-primary">Search</button>
+    <input type="search" class="form-control rounded" id="searchInput" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+    <button type="button" class="btn btn-outline-primary" id="searchButton" onclick="searchBooks()">Search</button>
   </div>
 
   <div class="album py-5 bg-body-tertiary">
     <div class="container">
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="search_display">
+        
+      </div>
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="books_display">
         
@@ -240,19 +206,20 @@
 
   async function refreshBooks() {
         document.getElementById("books_display").innerHTML = ""
-        const products = await getProducts()
+        const books = await getProducts()
         let counter = 0
 
         let htmlString = ``
-        products.forEach((item) => {
+        books.forEach((item) => {
           counter += 1;
           htmlString += `\n
           <div class="col">
             <div class="card shadow-sm">
-              <img src="${item.fields.image}" alt="Girl in a jacket" width="100%" height="225">
+              <img src="${item.fields.image}" alt="Girl in a jacket" width="100%" height="100%">
               <div class="card-body">
                 <p class="card-text">${item.fields.title}</p>
                 <p class="card-text">Author : ${item.fields.author}</p>
+                <p class="card-text">Available : ${item.fields.amount}</p>
                 <p class="${item.fields.is_borrowed === 'Borrowed' ? 'borrowed-text' : 'available-text'}">${item.fields.is_borrowed === 'Borrowed' ? 'Borrowed' : 'Available'}</p>
                 <div class="d-flex justify-content-between align-items-center">`;
 
@@ -283,6 +250,11 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <a href="details/${item.pk}">
+                                <button type="button" class="btn btn-primary">
+                                  more
+                                </button>
+                              </a>
                         </div>
                     </div>
                 </div>
@@ -341,6 +313,119 @@
         });
     }
     refreshBooks()
+
+    function hide (elements) {
+        elements = elements.length ? elements : [elements];
+        for (var index = 0; index < elements.length; index++) {
+          elements[index].style.display = 'none';
+        }
+    }
+
+    async function get_search_books() {
+        let searchTitle = document.getElementById('searchInput').value
+        return fetch("{% url 'landingPage:search_books_static' %}?search_title=" + encodeURIComponent(searchTitle)).then((res) => res.json())
+          .then((data) => {
+          // Check if the data contains books
+          if (Array.isArray(data)) {
+            data.forEach((book) => {
+              console.log('Primary Key:', book.pk);
+            });
+          }
+          return data; // Return the original data for further processing
+        });
+    }
+
+    async function searchBooks() {
+        const books = await get_search_books()
+        console.log(books)
+
+        document.getElementById("search_display").innerHTML = ""
+        hide(document.getElementById("books_display"))
+        let counter = 0
+
+        let htmlString = ``
+        if(Array.isArray(books)) {
+            books.forEach((item) => {
+                counter += 1
+                htmlString += `\n
+                <div class="col">
+            <div class="card shadow-sm">
+              <img src="${item.fields.image}" alt="Girl in a jacket" width="100%" height="100%">
+              <div class="card-body">
+                <p class="card-text">${item.fields.title}</p>
+                <p class="card-text">Author : ${item.fields.author}</p>
+                <p class="card-text">Available : ${item.fields.amount}</p>
+                <p class="${item.fields.is_borrowed === 'Borrowed' ? 'borrowed-text' : 'available-text'}">${item.fields.is_borrowed === 'Borrowed' ? 'Borrowed' : 'Available'}</p>
+                <div class="d-flex justify-content-between align-items-center">`;
+
+          if (item.fields.is_borrowed !== 'Borrowed') {
+            htmlString += `
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModals${counter}">Details</button>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModals1${counter}">Pinjam</button>
+                  </div>
+                  <small class="text-body-secondary">${item.fields.year_of_release}</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="exampleModals${counter}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Book Details</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Title : ${item.fields.title}</p>
+                            <p>Author : ${item.fields.author}</p>
+                            <p>Release year/date : ${item.fields.year_of_release}</p>
+                            <p>Description : </p>
+                            <p>${item.fields.description}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="exampleModals1${counter}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel1">Pinjam Details</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Title : ${item.fields.title}</p>
+                            <p>Author : ${item.fields.author}</p>
+                            <p>Release year/date : ${item.fields.year_of_release}</p>
+                            <p>Description : </p>
+                            <p>${item.fields.description}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-pinjam" data-bs-dismiss="modal" onclick="borrowBook(${item.pk})"> Pinjam </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+            } else {
+              htmlString += `
+                    <small class="text-body-secondary">${item.fields.year_of_release}</small>
+                  </div>
+                </div>
+              </div>`;
+            }
+            htmlString += `</div>`;
+          });
+        } else {
+          console.error('books is not an array:', books);
+        }
+        
+        document.getElementById("search_display").innerHTML = htmlString
+    }
 </script>
 
 <footer class="text-body-secondary py-5">

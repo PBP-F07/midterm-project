@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<style>
+  body{
+    background-color: #b4c5e4 ;
+    color: #090c9b;
+  }
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .b-example-divider {
+      width: 100%;
+      height: 3rem;
+      background-color: #090c9b;
+      border: solid rgba(0, 0, 0, .15);
+      border-width: 1px 0;
+      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 100vh;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      fill: currentColor;
+    }
+
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .btn-bd-primary {
+      color: #FFFFFF;
+      outline-color: #090c9b;
+      border-color: #090c9b;
+      background-color: #090c9b;
+    }
+
+    .btn-bd-primary:hover {
+        color: #090c9b;
+        background-color: #b4c5e4;
+    }
+
+    .container-detail {
+      display: block;
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 1300px;
+      height: 100px auto;
+      border: 2px solid #3c3744;
+      border-radius: 10px ;
+      background-color: rgba(255, 255, 255, 0.5);
+      color: #3c3744;
+    }
+
+    .container-detail-book{
+      display: flex;
+      flex-wrap: wrap;
+      margin: 50px ;
+      width: auto;
+      height: auto;
+    }
+
+    #book-image{
+      width: 270px ;
+      height: 360px ;
+    }
+
+    .user-username{
+      font-size: 140%;
+      color: #3c3744;
+    }
+
+    .col-user{
+      display: flex;
+      width: auto;
+    }
+    .user-comment{
+      font-size: medium;
+      color: #3c3744;
+    }
+
+    .comment-date{
+      font-size: 80%;
+    }
+
+    
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LiteraPhile-MyWishlist</title>
+<meta http-equiv="X-UA-Compatible" content="IE-edge">
+{% endblock meta %}
+
+{% block content %}
+<div class="container-detail">
+  <div class="row justify-content-md-center text-center">
+    <div class="row justify-content-md-center">
+      <h4>{{book.title}}</h4>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="container-detail-book ">
+      <img id="book-image" class="book-image" src="{{ book.image }}" alt="">
+    </div>
+  </div>
+  <div class="row">
+    <dl class="row">
+      <dt class="col-sm-2">Author: </dt>
+      <dd class="col-sm-10">{{book.author}}</dd>
+    
+      <dt class="col-sm-2">Published: </dt>
+      <dd class="col-sm-10">{{book.year_of_release}}</dd>
+    
+      <dt class="col-sm-2">Description: </dt>
+      <dd class="col-sm-10">{{book.description}}</dd>
+    
+    </dl>
+  </div>
+  <div class="row justify-content-md-center text-center ">
+    <div class="col-2">
+      <button type="button" class="btn btn-bd-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Add Comment</button>
+    </div>
+  </div>    
+</div>
+
+<h2 class="centered-heading">Discussion</h2>
+
+<div id="comments"></div>
+
+
+
+<div class="modal fade text-black" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Comment</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form" onsubmit="return false;">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">Comment: </label>
+                        <input type="text" class="form-control" id="comment" name="comment"></input>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-bd-primary" data-bs-dismiss="modal" id="button_add">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    async function getComments() {
+        const url = "get-comments/{{ book.pk }}"
+        return fetch(url).then((res) => res.json())
+    }
+
+    async function refreshComments(){
+        document.getElementById("comments").innerHTML="";
+        const comments = await getComments()
+        const user = "{{user}}"
+        let htmlString=``
+        comments.forEach((comment) => {
+            
+          if(user == comment.fields.user ){
+            htmlString += `\n
+            <div class="container-detail">
+              <div class="row">
+                <div class="col-user">
+                  <p class="user-username fw-bold">${comment.fields.user}</p>
+                </div>
+              </div>
+              
+              <div class="row">
+                <p class="user-comment">
+                  ${comment.fields.comment}  
+                </p>
+              </div>
+
+              <div class="row comment-date">
+                <p>${comment.fields.date_added}</p>  
+              </div>
+
+              <div class="row">
+                <div class="col justify-content-md-center text-center">
+                  <a href="comments/${comment.pk}">
+                    <button class="btn btn-bd-primary">Replies</button>
+                  </a> 
+                  <a href="delete-comment/${comment.fields.book}/${comment.pk}">
+                    <button class="btn btn-danger">Delete</button>
+                  </a>
+                    
+                </div>
+              </div>
+            </div>`
+
+          } else {
+            htmlString += `\n
+            <div class="container-detail">
+              <div class="row">
+                <div class="col-user">
+                  <p class="user-username fw-bold">${comment.fields.user}</p>
+                </div>
+
+                <div class="col">
+                  <p>${comment.fields.date_added}</p>  
+                </div>
+              </div>
+              
+              <div class="row">
+                <p class="user-comment">
+                  ${comment.fields.comment}  
+                </p>
+              </div>
+
+              <div class="row justify-content-md-center text-center">
+                <a href="comments/${comment.pk}">
+                  <button class="btn btn-bd-primary">Replies</button>
+                </a>   
+              </div>
+            </div>`
+          }
+            
+        });
+
+        document.getElementById("comments").innerHTML= htmlString
+    }
+
+    refreshComments()
+
+    function addComment(){
+        const url = "create-comment/{{ book.pk }}" 
+        fetch(url, {
+            method : "POST",
+            body: new FormData(document.querySelector("#form"))
+        }).then(refreshComments)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    document.getElementById("button_add").onclick = addComment
+
+</script>
+{% endblock content %}
