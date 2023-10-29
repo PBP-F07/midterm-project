@@ -8,12 +8,11 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            margin: 0; /* Remove default margin to ensure full-page background */
+            margin: 0; 
         }
 
-        /* New CSS for making the footer sticky */
         .content-wrapper {
-            min-height: 100vh; /* Set minimum height to cover the entire viewport */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -30,8 +29,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            flex-grow: 1; /* Allow the content to grow and push the footer to the bottom */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
+        
 
         table td {
             padding: 10px;
