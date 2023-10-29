@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from landingPage.models import Books
 from django.core import serializers
 from wishlist_page.forms import BookForm
+from wishlist_page.models import newWishlist
 
 @login_required
 # fungsi untuk pencarian buku yang menggunakan google api
