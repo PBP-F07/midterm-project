@@ -1,0 +1,125 @@
+table {
+    width: 100%;
+    border-collapse: separate;
+    border: 2px solid #000000;
+    background-color: #150957;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: center;
+}
+
+table tr {
+    background-color: #d3dafd;
+}
+
+table tr:first-child {
+    background-color: #110f42;
+    color: #fff;
+}
+
+body {
+    background-color: #b4c5e4;
+    color: #0f1842;
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.header p {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.card {
+    border: 3px solid #0f1842;
+    position: relative;
+    border-radius: 10px;
+    margin: 1px;
+    margin-bottom: 8px;
+    padding-top: 20px;
+    padding-bottom: 100px;
+    width: 200px;
+    text-align: center;
+    display: inline-block;
+    align-items: center;
+    margin-right: auto;
+}
+
+.card img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.card-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    padding: 10px;
+
+}
+
+.card-footer form {
+    max-width: 100%;
+}
+
+.wishlist-cards {
+    border: 5px solid #0f1842;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    width: 300px;
+    text-align: center;
+    display: inline-block;
+    align-items: center;
+}
+
+.container-card {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1400px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.custom-button.btn-primary {
+    color: #FFFFFF;
+    outline-color: #090c9b;
+    border-color: #090c9b;
+    background-color: #090c9b;
+}
+
+.custom-button.btn-primary:hover {
+    color: #090c9b;
+    background-color: #b4c5e4;
+}
+
+.custom-button2.btn-primary {
+    color: #090c9b;
+    outline-color: #090c9b;
+    border-color: #090c9b;
+    background-color: #b4c5e4;
+}
+
+.custom-button2.btn-primary:hover {
+    color: #090c9b;
+    background-color: #91abda;
+}
