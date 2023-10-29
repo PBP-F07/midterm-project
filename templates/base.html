@@ -1,5 +1,26 @@
 {% load static %}
 
+<style>
+  .main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Mengisi seluruh tinggi viewport */
+    margin: 0;
+}
+
+.main {
+    flex: 1; 
+    padding: 20px;
+}
+
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+</style>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -63,55 +84,51 @@
             </div>
             
           </nav>
-          
-          
-          <!-- <nav class="navbar navbar-expand-lg bg-primary">
-            <div class="d-flex flex-column align-items-center text-center">
-              <h3 class="text-white">Welcome, {{ user.username }}!</h3>
-            </div>
-
-            <div class="container-fluid">
-              
-              <a class="navbar-brand" href="#" style="color: white;">LiteraPhile</a>
-
-              <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{% url 'authentication:register' %}" style="color: white;">Register</a>
-                  </li>
-                  {% if user.is_authenticated %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user_profile_page:user_dashboard' %}" style="color: white;">User Dashboard</a>
-                  </li>
-                  {% endif %}
-
-                </ul>
-
-                
-
-                {% if user.is_authenticated %}
-                  <span>
-                    <a class="btn btn-danger" href="{% url 'authentication:logout' %}" role="button">Logout</a>
-                  </span>
-                {% endif %}
-              </div>
-
-              
-
-            </div>
-
-            
-
-          </nav> -->
-
         </header>
     
         <main>
             {% block content %}{% endblock %}
         </main>
     
-        <footer>
-            <!-- Footer content -->
+        <footer class="bg-light text-center text-lg-start">
+          <!-- Grid container -->
+          <div class="container p-4">
+            <!--Grid row-->
+            <div class="row">
+              <!--Grid column-->
+              <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                <h5 class="text-uppercase">Tentang LiteraPhile</h5>
+        
+                <p>
+                  LiteraPhile adalah aplikasi untuk saling meminjamkan buku yang dimiliki. 
+                  Pengguna dapat mengirimkan buku pada list buku yang tersedia di LiteraPhile 
+                  dan meminjam buku. Jika saat ini, buku belum tersedia, pengguna dapat 
+                  mengirimkan permintaan melalui halaman wishlist. Pengguna juga dapat 
+                  melakukan diskusi mengenai buku yang tersedia.
+                </p>
+              </div>
+              <!--Grid column-->
+        
+              <!--Grid column-->
+              <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                <h5 class="text-uppercase">Kolaborasi</h5>
+        
+                <p>
+                  Aplikasi ini dikembangkan oleh kelompok F07 dari kelas PBP F
+                </p>
+              </div>
+              <!--Grid column-->
+            </div>
+            <!--Grid row-->
+          </div>
+          <!-- Grid container -->
+        
+          <!-- Copyright -->
+          <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2020 Copyright:
+            <a class="text-dark">LiteraPhile</a>
+          </div>
+          <!-- Copyright -->
         </footer>
     </body>
 </html>
