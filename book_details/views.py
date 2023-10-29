@@ -15,7 +15,7 @@ def books_details(request,id):
     date = datetime.datetime.now()
     format = "%H %d-%m-%Y "
     context = {
-        'user' : user,
+        'name' : user,
         'book' : book,
         
     }
@@ -27,7 +27,7 @@ def replies(request,id):
     user = request.user.username
     comment = discussion.objects.filter(pk=id)[0]
     context = {
-        'user' : user,
+        'name' : user,
         'comment' : comment,
     }
 

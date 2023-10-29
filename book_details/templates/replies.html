@@ -2,7 +2,7 @@
 
 {% block meta %}
 <style>
-  body{
+body{
     background-color: #b4c5e4 ;
     color: #090c9b;
   }
@@ -59,20 +59,15 @@
     }
 
     .btn-bd-primary {
-      --bd-violet-bg: #712cf9;
-      --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+      color: #FFFFFF;
+      outline-color: #090c9b;
+      border-color: #090c9b;
+      background-color: #090c9b;
+    }
 
-      --bs-btn-font-weight: 600;
-      --bs-btn-color: var(--bs-white);
-      --bs-btn-bg: var(--bd-violet-bg);
-      --bs-btn-border-color: var(--bd-violet-bg);
-      --bs-btn-hover-color: var(--bs-white);
-      --bs-btn-hover-bg: #6528e0;
-      --bs-btn-hover-border-color: #6528e0;
-      --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-      --bs-btn-active-color: var(--bs-btn-hover-color);
-      --bs-btn-active-bg: #5a23c8;
-      --bs-btn-active-border-color: #5a23c8;
+    .btn-bd-primary:hover {
+        color: #090c9b;
+        background-color: #b4c5e4;
     }
 
     .bd-mode-toggle {
@@ -89,9 +84,9 @@
       padding: 20px;
       max-width: 1300px;
       height: 100px auto;
-      border: 1px solid #ccc;
-      border-radius: 5px ;
-      background-color: #fdfdfd;
+      border: 2px solid #3c3744;
+      border-radius: 10px ;
+      background-color: rgba(255, 255, 255, 0.5);
       color: #3c3744;
     }
 
@@ -106,17 +101,6 @@
     #book-image{
       width: 270px ;
       height: 360px ;
-    }
-
-    .container-detail-comment{
-      display: flex;
-      margin: 20px auto;
-      padding: 20px;
-      width: 1200px;
-      height: 10px auto;
-      border-radius: 5px ;
-      background-color: #fdfdfd;
-      color: #3c3744;
     }
 
     .user-username{
@@ -141,24 +125,6 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="navbar navbar-dark bg-primary shadow-sm">
-    <div class="container">
-      <a href="#" class="navbar-brand d-flex align-items-center">
-        <strong>LiteraPhile</strong>
-      </a>
-
-      <!-- Logout Button -->
-      <a class="btn btn-danger" href="{% url 'authentication:logout' %}" role="button">Logout</a> 
-
-      <a class="d-flex align-items-center text-dark h5 fw-normal" style="text-decoration: none;">Halo, {{ user }}</a>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-    </div>
-</div>
-
 <div class="modal fade text-black" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -203,7 +169,7 @@
     
     <div class="row justify-content-md-center text-center">
       <div class="col">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Reply</button>
+        <button type="button" class="btn btn-bd-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Reply</button>
       </div>
     </div>
 </div>

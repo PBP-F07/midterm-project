@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'landingPage',
     'wishlist_page',
     'book_details',
+    'user_profile_page'
 ]
 
 MIDDLEWARE = [

@@ -1,11 +1,14 @@
 import hashlib
 import requests
 import os
-from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from .models import WishlistItem
 from landingPage.views import get_books_json
+from django.views.decorators.csrf import csrf_exempt
+from landingPage.models import Books
+from django.core import serializers
 
 @login_required
 # fungsi untuk pencarian buku yang menggunakan google api
@@ -61,8 +64,43 @@ def add_to_wishlist(request):
 def load_wishlist(request):
     if request.user.is_authenticated:
         wishlist_items = WishlistItem.objects.filter(user=request.user)
-        wishlist_data = [{'title': item.title} for item in wishlist_items]
+        wishlist_data = []
+        
+        for item in wishlist_items:
+            book_exists = Books.objects.filter(title=item.title).exists()
+            status = "sudah tersedia" if book_exists else "sedang diproses"
+            wishlist_data.append({'id': item.pk, 'title': item.title, 'status': status})
+        
         return JsonResponse({'wishlist': wishlist_data})
     else:
         return JsonResponse({'wishlist': []})
 
+# fungsi untuk menghapus buku
+@csrf_exempt
+def delete_item_ajax(request, id):
+    if request.method == 'DELETE':
+        product = WishlistItem.objects.get(id=id, user=request.user)
+        product.delete()
+        return HttpResponse(b"CREATED", status=201)
+    
+# fungsi untuk menambah buku
+@csrf_exempt
+def add_book_ajax(request):
+    if request.method == 'POST':
+        user = request.user
+        title = request.POST.get("title")
+        author = request.POST.get("author")
+        description = request.POST.get("description")
+        image = request.POST.get("image")
+        year_of_release = request.POST.get("year_of_release")
+
+        new_book = WishlistItem(user=user, title=title, author=author, description=description, image=image, year_of_release=year_of_release)
+        new_book.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+
+def show_json(request):
+    data = WishlistItem.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
