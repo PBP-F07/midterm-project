@@ -70,6 +70,11 @@ def reject_wishlist(request, id):
     book.delete()
     return HttpResponse(b"REJECTED", status=200)
 
+# def delete_all_books(request):
+#     book = Books.objects.all()
+#     book.delete()
+#     return HttpResponse(b"DELETED", status=200)
+
 @csrf_exempt
 @require_http_methods(['DELETE'])
 def delete_book(request, id):
@@ -80,7 +85,7 @@ def delete_book(request, id):
 @csrf_exempt
 @require_http_methods(['POST'])
 def add_catalog(request, id):
-    json_file_path = 'static/admin/books_data.json'
+    # json_file_path = 'static/admin/books_data.json'
     requested_book = WishlistItem.objects.filter(id=id)[0]
 
     title = requested_book.title
@@ -88,8 +93,9 @@ def add_catalog(request, id):
     description = requested_book.description
     cover_img = requested_book.image
     release_year = requested_book.year_of_release
-
-    new_book = Books(title=title, author=authors, description=description, image=cover_img, year_of_release=release_year)
+    amount = 10
+    
+    new_book = Books(title=title, author=authors, description=description, image=cover_img, year_of_release=release_year, amount=amount)
     new_book.save()
 
     return HttpResponse(b"CREATED", status=201)
