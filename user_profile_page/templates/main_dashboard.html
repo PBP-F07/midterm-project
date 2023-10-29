@@ -1,68 +1,15 @@
-<head>
-    <title>User Dashboard</title>
-</head>
-
-<style>
-    .navbar-text {
-        color: #ffffff;
-        font-size: 24px;
-    }
-
-    .custom-sidebar {
-        background-color: #ffffff;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: 450px;
-        z-index: 1;
-        padding-top: 100px;
-        padding-right: 50px;
-        border-right: 2px solid black;
-        text-align: right;
-    }
-
-    .content {
-        margin-top: 30px;
-        margin-left: 500px;
-        padding: 20px;
-        font-weight:normal;
-    }
-
-    .navbar {
-        z-index: 2;
-    }
-
-    .content h6 {
-        margin-bottom: 10px;
-    }
-
-    .content .user_information {
-        padding-top: 5px;
-        padding-left: 15px;
-    }
-
-    /* CSS for the user_information class */
-    .user_information {
-        padding-top: 5px;
-        padding-left: 15px;
-    }
-
-
-    .edit-button {
-        background-color: #007bff;
-        color: #ffffff;
-        padding: 5px 10px;
-        border: none;
-        cursor: pointer;
-    }
-
-</style>
-
 {% extends 'base.html' %}
 
 {% block content %}
-    
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>LiteraPhile-User Dashboard</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'main_dashboard.css' %}">
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    </head>
     <!-- Navigation Bar -->
     <div class="navbar navbar-dark bg-primary shadow-sm">
         <div class="container">
@@ -114,9 +61,15 @@
         <hr>
         <h6>Bio</h6>
         <div class="user_information">   
-            <p id="bioContent">
-                <strong>{{ user_bio }}</strong>
-            </p>
+            {% if user_bio %}
+                <p id="bioContent">
+                    <strong>{{ user_bio }}</strong>
+                </p>
+            {% else %}
+                <p id="bioContent">
+                    <strong>Bio is empty, please update your bio.</strong>
+                </p>
+            {% endif %}
         </div>
         <button class="edit-button" data-toggle="modal" data-target="#editBioModal" id="editBioButton">
             Edit
@@ -141,10 +94,7 @@
                 <div class="modal-body">
                     <form id="bioForm" onsubmit="updateBio(); return false;">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="bioTextarea" class="col-form-label">Bio:</label>
-                            <textarea class="form-control" id="bioTextarea" name="bio"></textarea>
-                        </div>
+                        {{ form.as_p }} <!-- This will render the form under "Bio:" in the modal -->
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
                 </div>
@@ -155,29 +105,28 @@
     <script>
 
     function updateBio() {
-        alert("hahaha")
-        const bioTextarea = document.getElementById("bioTextarea");
-        const bio = bioTextarea.value;
-        const formattedBio = `<strong>${bio}</strong>`; // Wrap bio content with <strong> tags
-
+        const form = document.getElementById("bioForm");
+        const formData = new FormData(form);
+    
         fetch("{% url 'user_profile_page:update_bio_ajax' %}", {
             method: "POST",
             headers: {
                 "X-CSRFToken": getCookie("csrftoken"),
-                "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: `bio=${encodeURIComponent(bio)}`,
+            body: formData,
         })
-        .then(response => {
-            if (response.ok) {
-                document.getElementById("bioContent").innerHTML = formattedBio; // Set innerHTML to apply formatting
-                $('#editBioModal').modal('hide');
+        .then(response => response.text())  // Get the new bio from the response
+        .then(bio => {
+            if (bio) {
+                document.getElementById("bioContent").innerHTML = `<strong>${bio}</strong>`;  // Update the bio in the DOM
+                $('#editBioModal').modal('hide');  // Hide the modal
             } else {
                 throw new Error("Failed to update bio");
             }
         })
         .catch(error => console.error("Error:", error));
     }
+
 
     // Function to get CSRF token from cookies
     function getCookie(name) {
