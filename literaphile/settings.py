@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'admin_page',
     'landingPage',
     'wishlist_page',
+    'book_details',
     'user_profile_page'
 ]
 

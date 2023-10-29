@@ -144,27 +144,6 @@
       </ul>
     </div>
 
-    
-<header data-bs-theme="dark">
-  
-  <div class="collapse text-bg-dark" id="navbarHeader">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-8 col-md-7 py-4">
-          <h4>About</h4>
-          <p class="text-body-secondary">Kami kelompok PBP F07 dengan anggota : Vincent, Julian, Evan, Zaim, dan Dien</p>
-        </div>
-        <div class="col-sm-4 offset-md-1 py-4">
-          <ul class="list-unstyled">
-            <li><a href="{% url 'user_profile_page:user_dashboard' %}" class="text-white">User Profile</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</header>
-
 <main>
 
   <section class="py-5 text-center container">
@@ -271,6 +250,11 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <a href="details/${item.pk}">
+                                <button type="button" class="btn btn-primary">
+                                  more
+                                </button>
+                              </a>
                         </div>
                     </div>
                 </div>
