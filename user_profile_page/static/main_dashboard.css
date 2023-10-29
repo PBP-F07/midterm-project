@@ -24,12 +24,17 @@
     resize: none;  /* Disable resize */
 }
 
-.content {
-    margin-top: 30px;
-    margin-left: 500px;
-    padding: 20px;
-    font-weight:normal;
+
+.container-fluid {
+    background-color: black;
+    color: white;
 }
+
+.edit-button {
+    background-color: white;
+    color: black;
+}
+
 
 .navbar {
     z-index: 2;

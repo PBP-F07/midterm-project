@@ -1,3 +1,7 @@
+<head>
+    <title>User Dashboard</title>
+</head>
+
 {% extends 'base.html' %}
 
 {% block content %}
@@ -5,65 +9,76 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>LiteraPhile-User Dashboard</title>
+        <title>LiteraPhile-Book Check</title>
         {% load static %}
-        <link rel="stylesheet" href="{% static 'main_dashboard.css' %}">
+        <link rel="stylesheet" href="{% static 'borrowed_book_check.css' %}">
         <meta http-equiv="X-UA-Compatible" content="IE-edge">
     </head>
     
-    <div class="custom-sidebar">
-        <a class="navbar-brand" href="{% url 'user_profile_page:user_dashboard' %}" style="color: #000000;">
-            <strong>
-                Welcome, {{ user_info.username }}!
-            </strong>
-        </a>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'user_profile_page:user_dashboard' %}" style="color: #000000;">User Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'user_profile_page:borrowed_book_check_render' %}" style="color: #000000;">Check For Books</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'landingPage:show_main' %}" style="color: #000000;">Return to Landing Page</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'authentication:logout' %}" style="color: #FF0800;">Logout</a>
-            </li>
-        </ul>
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                    <a href="{% url 'user_profile_page:user_dashboard' %}" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <span class="fs-5 d-none d-sm-inline" style="color:black">Welcome, {{ user_info.username }}!</span>
+                    </a>
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                        <li class="nav-item">
+                            <a href="{% url 'user_profile_page:user_dashboard' %}" class="nav-link align-middle px-0">
+                                <i class="fs-4 bi-person"></i> <span class="ms-1 d-none d-sm-inline" style="color:black">User Profile</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'user_profile_page:borrowed_book_check_render' %}" class="nav-link align-middle px-0">
+                                <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline" style="color:black">Check For Books</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'landingPage:show_main' %}" class="nav-link align-middle px-0">
+                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline" style="color:black">Return to Landing Page</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'authentication:logout' %}" class="nav-link align-middle px-0">
+                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline" style="color:red">Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col py-3 custom-content-area">
+                <h6>Profile</h6>
+                <hr>
+                <h6>Username</h6>
+                <div class="user_information">
+                    <h6>
+                        <strong>{{ user_info.username }}</strong>
+                    </h6>
+                </div>
+                <hr>
+                <h6>Bio</h6>
+                <div class="user_information">   
+                    {% if user_bio %}
+                        <p id="bioContent">
+                            <strong>{{ user_bio }}</strong>
+                        </p>
+                    {% else %}
+                        <p id="bioContent">
+                            <strong>Bio is empty, please update your bio.</strong>
+                        </p>
+                    {% endif %}
+                </div>
+                <button class="edit-button" data-toggle="modal" data-target="#editBioModal" id="editBioButton">
+                    Edit
+                </button>
+                <hr>
+                <h6>
+                    <strong>Member of LiteraPhile</strong>
+                </h6>
+            </div>
+        </div>
     </div>
     
-
-    <div class="content">
-        <h6>Profile</h6>
-        <hr>
-        <h6>Username</h6>
-        <div class="user_information">
-            <h6>
-                <strong>{{ user_info.username }}</strong>
-            </h6>
-        </div>
-        <hr>
-        <h6>Bio</h6>
-    <div class="user_information">   
-        {% if user_bio %}
-            <p id="bioContent">
-                <strong>{{ user_bio }}</strong>
-            </p>
-        {% else %}
-            <p id="bioContent">
-                <strong>Bio is empty, please update your bio.</strong>
-            </p>
-        {% endif %}
-    </div>
-        <button class="edit-button" data-toggle="modal" data-target="#editBioModal" id="editBioButton">
-            Edit
-        </button>
-        <hr>
-        <h6>
-            <strong>Member of LiteraPhile</strong>
-        </h6>
-    </div>
     
     
 
@@ -79,7 +94,10 @@
                 <div class="modal-body">
                     <form id="bioForm" onsubmit="updateBio(); return false;">
                         {% csrf_token %}
-                        {{ form.as_p }} <!-- This will render the form under "Bio:" in the modal -->
+                        <div class="mb-3">
+                            <label for="bioTextarea" class="col-form-label">Bio:</label>
+                            <textarea class="form-control" id="bioTextarea" name="bio"></textarea>
+                        </div>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
                 </div>
@@ -89,44 +107,45 @@
 
     <script>
 
-    function updateBio() {
-        const form = document.getElementById("bioForm");
-        const formData = new FormData(form);
+        function updateBio() {
+            const form = document.getElementById("bioForm");
+            const formData = new FormData(form);
+        
+            fetch("{% url 'user_profile_page:update_bio_ajax' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                },
+                body: formData,
+            })
+            .then(response => response.text())  // Get the new bio from the response
+            .then(bio => {
+                if (bio) {
+                    document.getElementById("bioContent").innerHTML = `<strong>${bio}</strong>`;  // Update the bio in the DOM
+                    $('#editBioModal').modal('hide');  // Hide the modal
+                } else {
+                    throw new Error("Failed to update bio");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
     
-        fetch("{% url 'user_profile_page:update_bio_ajax' %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": getCookie("csrftoken"),
-            },
-            body: formData,
-        })
-        .then(response => response.text())  // Get the new bio from the response
-        .then(bio => {
-            if (bio) {
-                document.getElementById("bioContent").innerHTML = `<strong>${bio}</strong>`;  // Update the bio in the DOM
-                $('#editBioModal').modal('hide');  // Hide the modal
-            } else {
-                throw new Error("Failed to update bio");
-            }
-        })
-        .catch(error => console.error("Error:", error));
-    }
-
-
-    // Function to get CSRF token from cookies
-    function getCookie(name) {
-        var value = "; " + document.cookie;
-        var parts = value.split("; " + name + "=");
-        if (parts.length === 2) return parts.pop().split(";").shift();
-    }
-
-    document.getElementById("editBioButton").addEventListener("click", () => {
-        document.getElementById("form").reset();
-        const bioTextarea = document.getElementById("bioTextarea");
-        bioTextarea.value = document.getElementById("bioContent").textContent;
-    });
     
-    </script>
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+    
+        document.getElementById("editBioButton").addEventListener("click", () => {
+            document.getElementById("form").reset();
+            const bioTextarea = document.getElementById("bioTextarea");
+            bioTextarea.value = document.getElementById("bioContent").textContent;
+        });
+        
+        </script>
+    
 
     
 {% endblock content %}

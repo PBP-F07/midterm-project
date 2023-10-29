@@ -4,27 +4,34 @@
     <title>Login</title>
     <style>
         body {
-            background-image: url('https://i.pinimg.com/originals/b0/94/57/b094570b57a955fdccaf35eb1cc60058.jpg'); /* Ganti 'url_gambar_anda.jpg' dengan URL gambar yang ingin Anda gunakan */
-            background-size: cover; /* Menyesuaikan ukuran gambar dengan halaman */
-            background-repeat: no-repeat; /* Menghindari pengulangan gambar */
-            background-attachment: fixed; /* Membuat gambar tetap di tempat saat menggulir */
+            background-image: url('https://i.pinimg.com/originals/b0/94/57/b094570b57a955fdccaf35eb1cc60058.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0; /* Remove default margin to ensure full-page background */
+        }
+
+        /* New CSS for making the footer sticky */
+        .content-wrapper {
+            min-height: 100vh; /* Set minimum height to cover the entire viewport */
+            display: flex;
+            flex-direction: column;
         }
 
         .login {
-            border: 1px solid #ccc; /* Add a border */
-            padding: 20px; /* Add padding to create space around the content */
-            background-color: #f9f9f9; /* Set a background color */
-            max-width: 400px; /* Limit the maximum width */
-            margin: 0 auto; /* Center the login div horizontally */
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
-            border-radius: 5px; /* Add rounded corners */
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #f9f9f9;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
             display: flex;
-            margin-top: 100px;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            flex-grow: 1; /* Allow the content to grow and push the footer to the bottom */
         }
-
 
         table td {
             padding: 10px;
@@ -37,60 +44,56 @@
         }
 
         .btn-primary {
-            background-color: #090c9b !important; /* Warna pink untuk tombol */
+            background-color: #090c9b !important;
             border-color: #090c9b !important;
         }
 
         .btn-primary:hover {
-            background-color: #91abda !important; /* Warna pink saat dihover */
+            background-color: #91abda !important;
             border-color: #91abda !important;
         }
 
-
+        /* Adjust footer style */
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
     </style>
 {% endblock meta %}
 
 {% block content %}
-
-    <div class = "login">
-
-        <h1>Login</h1>
-
-        <form method="POST" action="">
-
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td>Username: </td>
-                    <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
-                </tr>
-                        
-                <tr>
-                    <td>Password: </td>
-                    <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
-                </tr>
-            </table>
-
-            <div class="login_button">
-                <input type="submit" class="btn btn-primary" value="Login">
+    <div class="content-wrapper">
+        <div class = "login">
+            <h1>Login</h1>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td>Username: </td>
+                        <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+                    </tr>    
+                    <tr>
+                        <td>Password: </td>
+                        <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+                    </tr>
+                </table>
+                <div class="login_button">
+                    <input type="submit" class="btn btn-primary" value="Login">
+                </div>
+            </form>
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}     
+            <div class="card-footer text-center">
+                Don't have an account yet? <a href="{% url 'authentication:register' %}">Register Now</a>
             </div>
-
-        </form>
-
-
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}     
-        <div class="card-footer text-center">
-            Don't have an account yet? <a href="{% url 'authentication:register' %}">Register Now</a>
         </div>
-            
-        
-
     </div>
 
 {% endblock content %}
