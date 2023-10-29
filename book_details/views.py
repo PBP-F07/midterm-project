@@ -71,7 +71,6 @@ def create_reply(requset,id):
     if requset.method == 'POST':
         user = requset.user.username
         replies = requset.POST.get("reply")
-        print(reply)
         format = "%H %d-%m-%Y "
         date = datetime.datetime.now().strftime(format)
         comments = discussion.objects.filter(pk=id)[0]
@@ -81,4 +80,9 @@ def create_reply(requset,id):
         return HttpResponse(b"CREATED",status=201)
     return HttpResponseNotFound()
 
+def donate(request,book_id):
+    book = Books.objects.get(pk=book_id)
+    book.amount = book.amount+1
+    book.save()
+    return HttpResponseRedirect(reverse('book_details:books_details',kwargs={"id": book_id}))
 
