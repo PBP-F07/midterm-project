@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User, Group
-from wishlist_page.models import WishlistItem, newWishlist
+from wishlist_page.models import WishlistItem, addWishlist
 from landingPage.models import Books
 
 @login_required(login_url='')
@@ -52,7 +52,7 @@ def show_managebooks(request):
     return render(request, "managebooks.html", context)
 
 def show_notes(request):
-    notes = newWishlist.objects.all()
+    notes = addWishlist.objects.all()
     groups = request.user.groups.all()
 
     context = {
