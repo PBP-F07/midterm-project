@@ -38,7 +38,7 @@ def search_books(request):
         return render(request, 'main_wishlist.html', {'book_data': book_data, 'user_wishlist': user_wishlist})
     return render(request, 'main_wishlist.html', {'book_data': []})
 
-# fungsi untuk menambahkan notes wishlist
+# fungsi untuk menambahkan notes wishlist berupa buku yang tidak ditemukan
 def create_notes(request):
     form = BookForm(request.POST or None)
 
@@ -82,7 +82,7 @@ def load_wishlist(request):
         for item in wishlist_items:
             book_exists = Books.objects.filter(title=item.title).exists()
             status = "sudah tersedia" if book_exists else "sedang diproses"
-            wishlist_data.append({'id': item.pk, 'title': item.title, 'status': status})
+            wishlist_data.append({'id': item.pk, 'title': item.title, 'author':item.author, 'status': status})
         
         return JsonResponse({'wishlist': wishlist_data})
     else:

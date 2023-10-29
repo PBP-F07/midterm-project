@@ -1,7 +1,7 @@
 from django.forms import ModelForm
-from wishlist_page.models import Notes
+from wishlist_page.models import newWishlist
 
 class BookForm(ModelForm):
     class Meta:
-        model = Notes
-        fields = ["notes"]
+        model = newWishlist
+        fields = ["title", "author"]
