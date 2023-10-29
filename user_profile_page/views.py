@@ -9,6 +9,7 @@ from landingPage.models import Books
 from user_profile_page.models import Member
 from wishlist_page.models import WishlistItem
 from django.core import serializers
+from landingPage.models import Books
 import json
 from .forms import MemberForm
 
@@ -80,6 +81,11 @@ def get_wishlisted_books_json(request):
         data = serializers.serialize('json', wishlisted_books)
         struct = json.loads(data)
         return JsonResponse(struct, safe=False)
+    
+def delete_all_books(request):
+    books = Books.objects.all()
+    books.delete()
+    return HttpResponse(b"DELETED", status=200)
 
 @csrf_exempt
 def update_bio_ajax(request):
