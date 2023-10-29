@@ -7,6 +7,7 @@ from django.core import serializers
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import datetime
+from .forms import CommentForm,ReplyForm
 
 @login_required(login_url='')
 def books_details(request,id):
@@ -91,3 +92,28 @@ def donate(request,book_id):
     book.save()
     return HttpResponseRedirect(reverse('book_details:books_details',kwargs={"id": book_id}))
 
+def edit_comment(request, book_id, comment_id):
+
+    comment = discussion.objects.get(pk=comment_id)
+
+    form = CommentForm(request.POST or None, instance=comment)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('book_details:books_details',kwargs={"id": book_id}))
+    
+    context = {'form': form}
+    return render(request, "edit_comment.html", context)
+
+def edit_reply(request, comment_id, reply_id):
+
+    replies = reply.objects.get(pk=reply_id)
+
+    form = ReplyForm(request.POST or None, instance=replies)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('book_details:replies',kwargs={"id": comment_id}))
+    
+    context = {'form': form}
+    return render(request, "edit_reply.html", context)

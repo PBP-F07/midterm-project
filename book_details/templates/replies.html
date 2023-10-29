@@ -53,145 +53,149 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="modal fade text-black" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Reply</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="form" onsubmit="return false;">
 
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="name" class="col-form-label">Reply: </label>
-                        <input type="text" class="form-control" id="reply" name="reply"></input>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="button_add">Add</button>
-            </div>
+<body>
+    <div class="modal fade text-black" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Add Reply</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form id="form" onsubmit="return false;">
+
+                      {% csrf_token %}
+                      <div class="mb-3">
+                          <label for="name" class="col-form-label">Reply: </label>
+                          <input type="text" class="form-control" id="reply" name="reply"></input>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="button_add">Add</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="container-detail">
+      <div class="row">
+        <div class="col-user">
+          <p class="user-username fw-bold">{{comment.user}}</p>
         </div>
-    </div>
-</div>
-
-<div class="container-detail">
-    <div class="row">
-      <div class="col-user">
-        <p class="user-username fw-bold">{{comment.user}}</p>
       </div>
-    </div>
-    
-    <div class="row">
-      <p class="user-comment">
-        {{comment.comment}}  
-      </p>
-    </div>
-
-    <div class="row">
-        <p>{{comment.date_added}}</p>  
-    </div>
-    
-    <div class="row justify-content-md-center text-center">
-      <div class="col">
-        <button type="button" class="btn btn-bd-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Reply</button>
+      
+      <div class="row">
+        <p class="user-comment">
+          {{comment.comment}}  
+        </p>
       </div>
-    </div>
-</div>
 
-<div id="replies"></div>
+      <div class="row">
+          <p>{{comment.date_added}}</p>  
+      </div>
+      
+      <div class="row justify-content-md-center text-center">
+        <div class="col">
+          <button type="button" class="btn btn-bd-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Reply</button>
+        </div>
+      </div>
+  </div>
+
+  <div id="replies"></div>
 
 
-<script>
-    async function getReplies() {
-        const url = "get-replies/{{ comment.pk }}"
-        return fetch(url).then((res) => res.json())
-    }
+  <script>
+      async function getReplies() {
+          const url = "get-replies/{{ comment.pk }}"
+          return fetch(url).then((res) => res.json())
+      }
 
-    async function refreshReplies(){
-        document.getElementById("replies").innerHTML="";
-        const replies = await getReplies()
-        const user = "{{user}}"
-        let htmlString=``
-        replies.forEach((reply) => {
-            
-          if(user == reply.fields.user ){
-            htmlString += `\n
-                <div class="container-detail">
-                  <div class="row">
-                    <div class="col-user">
-                      <p class="user-username fw-bold">${reply.fields.user}</p>
+      async function refreshReplies(){
+          document.getElementById("replies").innerHTML="";
+          const replies = await getReplies()
+          const user = "{{user}}"
+          let htmlString=``
+          replies.forEach((reply) => {
+              
+            if(user == reply.fields.user ){
+              htmlString += `\n
+                  <div class="container-detail">
+                    <div class="row">
+                      <div class="col-user">
+                        <p class="user-username fw-bold">${reply.fields.user}</p>
+                      </div>
+                    </div>
+                    
+                    <div class="row">
+                      <p class="user-comment">
+                        ${reply.fields.replies}  
+                      </p>
+                    </div>
+                    
+                    <div class="row">
+                      <div class="col">
+                        <p>${reply.fields.date_add}</p>  
+                      </div>
+                    </div>
+                    <div class="row justify-content-md-center text-center">
+                      <class ="col">
+                        <a href="edit-reply/${reply.fields.comment}/${reply.pk}">
+                          <button class="btn btn-bd-primary">Edit</button>
+                        </a>
+                        <a href="delete-reply/${reply.fields.comment}/${reply.pk}">
+                          <button class="btn btn-danger">Delete</button>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div class="row">
-                    <p class="user-comment">
-                      ${reply.fields.replies}  
-                    </p>
-                  </div>
-                  
-                  <div class="row">
-                    <div class="col">
-                      <p>${reply.fields.date_add}</p>  
+              `
+            } else {
+              htmlString += `\n
+                  <div class="container-detail">
+                    <div class="row">
+                      <div class="col-user">
+                        <p class="user-username fw-bold">${reply.fields.user}</p>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col">
+                        <p>${reply.fields.date_add}</p>  
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <p class="user-comment">
+                        ${reply.fields.replies}  
+                      </p>
                     </div>
                   </div>
-                  <div class="row justify-content-md-center text-center">
-                    <class ="col">
-                      <a href="delete-reply/${reply.fields.comment}/${reply.pk}">
-                        <button class="btn btn-danger">Delete</button>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-            `
-          } else {
-            htmlString += `\n
-                <div class="container-detail">
-                  <div class="row">
-                    <div class="col-user">
-                      <p class="user-username fw-bold">${reply.fields.user}</p>
-                    </div>
-                  </div>
+              `
+            }
+              
+          });
 
-                  <div class="row">
-                    <div class="col">
-                      <p>${reply.fields.date_add}</p>  
-                    </div>
-                  </div>
+          document.getElementById("replies").innerHTML= htmlString
+      }
 
-                  <div class="row">
-                    <p class="user-comment">
-                      ${reply.fields.replies}  
-                    </p>
-                  </div>
-                </div>
-            `
-          }
-            
-        });
+      refreshReplies()
 
-        document.getElementById("replies").innerHTML= htmlString
-    }
+      function addReply(){
+          const url = "create-reply/{{ comment.pk }}" 
+          fetch(url, {
+              method : "POST",
+              body: new FormData(document.querySelector("#form"))
+          }).then(refreshReplies)
 
-    refreshReplies()
+          document.getElementById("form").reset()
+          return false
+      }
 
-    function addReply(){
-        const url = "create-reply/{{ comment.pk }}" 
-        fetch(url, {
-            method : "POST",
-            body: new FormData(document.querySelector("#form"))
-        }).then(refreshReplies)
+      document.getElementById("button_add").onclick = addReply
+  </script>
+</body>
 
-        document.getElementById("form").reset()
-        return false
-    }
-
-    document.getElementById("button_add").onclick = addReply
-
-
-
-</script>
 {% endblock content %}
