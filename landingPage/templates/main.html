@@ -146,6 +146,7 @@
 
     
 <header data-bs-theme="dark">
+  
   <div class="collapse text-bg-dark" id="navbarHeader">
     <div class="container">
       <div class="row">
@@ -162,24 +163,6 @@
     </div>
   </div>
 
-  <!-- Navigation Bar -->
-  <div class="navbar navbar-dark bg-primary shadow-sm">
-    <div class="container">
-      <a href="#" class="navbar-brand d-flex align-items-center">
-        <strong>LiteraPhile</strong>
-      </a>
-
-      <!-- Logout Button -->
-      <a class="btn btn-danger" href="{% url 'authentication:logout' %}" role="button">Logout</a> 
-
-      <a class="d-flex align-items-center text-dark h5 fw-normal" style="text-decoration: none;">Halo, {{ name }}</a>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-    </div>
-  </div>
 </header>
 
 <main>
