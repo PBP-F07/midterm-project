@@ -3,11 +3,12 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import WishlistItem
+from .models import WishlistItem, addWishlist
 from django.views.decorators.csrf import csrf_exempt
 from landingPage.models import Books
 from django.core import serializers
 from wishlist_page.forms import BookForm
+from wishlist_page.models import newWishlist
 
 @login_required
 # fungsi untuk pencarian buku yang menggunakan google api
@@ -115,5 +116,5 @@ def add_book_ajax(request):
     return HttpResponseNotFound()
 
 def show_json(request):
-    data = WishlistItem.objects.filter(user=request.user)
+    data = addWishlist.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")

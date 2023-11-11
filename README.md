@@ -1,3 +1,5 @@
+[![Deploy](https://github.com/PBP-F07/midterm-project/actions/workflows/pbp-deploy.yml/badge.svg)](https://github.com/PBP-F07/midterm-project/actions/workflows/pbp-deploy.yml)
+
 # Tahap I
 ## Nama-nama anggota kelompok
 1. Devandra Reswara Arkananta (2206083552)
@@ -5,6 +7,14 @@
 3. Vincent Suhardi (2206082505)
 4. Zaim Aydin Nazif (2206082524)
 5. Julian Alex Joshua (2206082606)
+
+link aplikasi : http://literaphile-f07-tk.pbp.cs.ui.ac.id/ (berhasil deployment)
+![image](https://github.com/PBP-F07/midterm-project/assets/124993970/b9a864b3-b4e5-4337-817b-0199c100dcde)
+
+
+link aplikasi : http://literaphile-f07-tk.pbp.cs.ui.ac.id/ (berhasil deployment)
+![image](https://github.com/PBP-F07/midterm-project/assets/124993970/b9a864b3-b4e5-4337-817b-0199c100dcde)
+
 
 ![workflows](https://github.com/PBP-F07/midterm-project/workflows/pbp-deploy.yml/badge.svg)
 ## Cerita aplikasi yang diajukan serta manfaatnya
