@@ -6,6 +6,7 @@
 4. Zaim Aydin Nazif (2206082524)
 5. Julian Alex Joshua (2206082606)
 
+![workflows](https://github.com/PBP-F07/midterm-project/workflows/pbp-deploy.yml/badge.svg)
 ## Cerita aplikasi yang diajukan serta manfaatnya
 
 ### Deskripsi
