@@ -53,7 +53,7 @@ def login_user(request):
             break
         
     if admin_exist == False:
-        username = ["zaim1", "vincent", "dien", "evan", "julian"]
+        username = ["zaim2", "vincent", "dien", "evan", "julian"]
         password_new = "pbpkelompokf07"
         
         for new_username in username:
