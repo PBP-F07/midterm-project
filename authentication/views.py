@@ -8,10 +8,12 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from landingPage.models import Books
 from landingPage.views import fetch_static_books
+from django.views.decorators.csrf import csrf_exempt
 
 
 
 # Create your views here.
+@csrf_exempt
 def register(request):
     form = UserCreationForm()
 
@@ -28,6 +30,7 @@ def register(request):
     context = {'form':form}
     return render(request, 'register.html', context)
 
+@csrf_exempt
 def login_user(request):
 
     if (len(Books.objects.all()) == 0):
