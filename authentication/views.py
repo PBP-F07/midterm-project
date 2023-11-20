@@ -45,8 +45,14 @@ def login_user(request):
             group = Group(name=group_name)
             group.save()
 
-    list_user = User.objects.all().name 
-    if "vincent" not in list_user:
+    list_user = User.objects.all()
+    admin_exist = False
+    for username in list_user:
+        if "vincent" == username:
+            admin_exist = True
+            break
+        
+    if admin_exist == False:
         username = ["zaim1", "vincent", "dien", "evan", "julian"]
         password_new = "pbpkelompokf07"
         
