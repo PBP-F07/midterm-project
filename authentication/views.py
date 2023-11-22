@@ -44,22 +44,6 @@ def login_user(request):
         if not Group.objects.filter(name=group_name).exists():
             group = Group(name=group_name)
             group.save()
-
-    list_user = User.objects.all()
-    admin_exist = False
-    for username in list_user:
-        if "adminZaim" == username:
-            admin_exist = True
-            break
-        
-    if admin_exist == False:
-        username = ["adminZaim", "adminVincent", "adminDien", "adminEvan", "adminJulian"]
-        password_new = "pbpkelompokf07"
-        
-        for new_username in username:
-            new_admin = User.objects.create_user(new_username, password=password_new)
-            default_group = Group.objects.get(name='admin')
-            new_admin.groups.add(default_group)
     
     if not superuser_exists:
         username = "PBPF07"
@@ -90,3 +74,13 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('authentication:login')
+
+@csrf_exempt
+def make_admin(request):
+    username = ["adminZaim", "adminVincent", "adminDien", "adminEvan", "adminJulian"]
+    password_new = "pbpkelompokf07"
+    
+    for new_username in username:
+        new_admin = User.objects.create_user(new_username, password=password_new)
+        default_group = Group.objects.get(name='admin')
+        new_admin.groups.add(default_group)
