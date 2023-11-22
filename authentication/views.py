@@ -48,12 +48,12 @@ def login_user(request):
     list_user = User.objects.all()
     admin_exist = False
     for username in list_user:
-        if "vincent" == username:
+        if "adminZaim" == username:
             admin_exist = True
             break
         
     if admin_exist == False:
-        username = ["zaim2", "vincent", "dien", "evan", "julian"]
+        username = ["adminZaim", "adminVincent", "adminDien", "adminEvan", "adminJulian"]
         password_new = "pbpkelompokf07"
         
         for new_username in username:
