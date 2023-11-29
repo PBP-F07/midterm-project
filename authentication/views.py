@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -109,4 +110,40 @@ def login_mobile(request):
         return JsonResponse({
             "status": False,
             "message": "Login gagal, periksa kembali email atau kata sandi."
+        }, status=401)
+
+@csrf_exempt
+def register_mobile(request):
+    if request.method == 'POST':
+        print(request.body)
+        data = json.loads(request.body)
+
+        username = data["username"]
+        password1 = data["password1"]
+        password2 = data["password2"]
+
+        if password1 != password2:
+            return JsonResponse({'status': 'failed', 'message': 'Gagal membuat akun'})
+
+        new_user = User.objects.create_user(username = username, password = password1)
+        new_user.save()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+def logout_mobile(request):
+    username = request.user.username
+
+    try:
+        logout(request)
+        return JsonResponse({
+            "username": username,
+            "status": True,
+            "message": "Logout berhasil!"
+        }, status=200)
+    except:
+        return JsonResponse({
+        "status": False,
+        "message": "Logout gagal."
         }, status=401)
