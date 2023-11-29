@@ -51,7 +51,6 @@ def login_user(request):
         password = "pbpkelompokf07"
         User.objects.create_superuser(username, email, password)
 
-
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -84,3 +83,30 @@ def make_admin(request):
         new_admin = User.objects.create_user(new_username, password=password_new)
         default_group = Group.objects.get(name='admin')
         new_admin.groups.add(default_group)
+
+@csrf_exempt
+def login_mobile(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            # Status login sukses.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login sukses!"
+                # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Login gagal, akun dinonaktifkan."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Login gagal, periksa kembali email atau kata sandi."
+        }, status=401)
