@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -8,10 +9,12 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from landingPage.models import Books
 from landingPage.views import fetch_static_books
+from django.views.decorators.csrf import csrf_exempt
 
 
 
 # Create your views here.
+@csrf_exempt
 def register(request):
     form = UserCreationForm()
 
@@ -28,6 +31,7 @@ def register(request):
     context = {'form':form}
     return render(request, 'register.html', context)
 
+@csrf_exempt
 def login_user(request):
 
     if (len(Books.objects.all()) == 0):
@@ -41,22 +45,12 @@ def login_user(request):
         if not Group.objects.filter(name=group_name).exists():
             group = Group(name=group_name)
             group.save()
-
-    if len(User.objects.all())==0:
-        username = ["zaim", "vincent", "dien", "evan", "julian"]
-        password_new = "pbpkelompokf07"
-        
-        for new_username in username:
-            new_admin = User.objects.create_user(new_username, password=password_new)
-            default_group = Group.objects.get(name='admin')
-            new_admin.groups.add(default_group)
     
     if not superuser_exists:
         username = "PBPF07"
         email = "zaim.aydin@ui.ac.id"
         password = "pbpkelompokf07"
         User.objects.create_superuser(username, email, password)
-
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -80,3 +74,76 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('authentication:login')
+
+@csrf_exempt
+def make_admin(request):
+    username = ["adminZaim", "adminVincent", "adminDien", "adminEvan", "adminJulian"]
+    password_new = "pbpkelompokf07"
+    
+    for new_username in username:
+        new_admin = User.objects.create_user(new_username, password=password_new)
+        default_group = Group.objects.get(name='admin')
+        new_admin.groups.add(default_group)
+
+@csrf_exempt
+def login_mobile(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            # Status login sukses.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login sukses!"
+                # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Login gagal, akun dinonaktifkan."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Login gagal, periksa kembali email atau kata sandi."
+        }, status=401)
+
+@csrf_exempt
+def register_mobile(request):
+    if request.method == 'POST':
+        print(request.body)
+        data = json.loads(request.body)
+
+        username = data["username"]
+        password1 = data["password1"]
+        password2 = data["password2"]
+
+        if password1 != password2:
+            return JsonResponse({'status': 'failed', 'message': 'Gagal membuat akun'})
+
+        new_user = User.objects.create_user(username = username, password = password1)
+        new_user.save()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+def logout_mobile(request):
+    username = request.user.username
+
+    try:
+        logout(request)
+        return JsonResponse({
+            "username": username,
+            "status": True,
+            "message": "Logout berhasil!"
+        }, status=200)
+    except:
+        return JsonResponse({
+        "status": False,
+        "message": "Logout gagal."
+        }, status=401)

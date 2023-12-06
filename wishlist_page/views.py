@@ -11,6 +11,7 @@ from wishlist_page.forms import BookForm, MoodForm
 from wishlist_page.models import newWishlist
 
 @login_required
+@csrf_exempt
 # fungsi untuk pencarian buku yang menggunakan google api
 def search_books(request):
     if request.method == 'POST':
@@ -40,6 +41,7 @@ def search_books(request):
     return render(request, 'main_wishlist.html', {'book_data': []})
 
 # fungsi untuk menambahkan notes wishlist berupa buku yang tidak ditemukan
+@csrf_exempt
 def create_notes(request):
     form = BookForm(request.POST or None)
 
@@ -66,6 +68,7 @@ def update_mood_ajax(request):
     return HttpResponseNotFound()
 
 # fungsi untuk menambahkan buku ke wishlist
+@csrf_exempt
 def add_to_wishlist(request):
     if request.method == 'POST':
         title = request.POST.get('title')
