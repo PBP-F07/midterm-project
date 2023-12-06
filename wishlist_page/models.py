@@ -20,3 +20,7 @@ class addWishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) 
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
+
+class Mood(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    mood = models.TextField(max_length=200)

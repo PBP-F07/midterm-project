@@ -3,11 +3,11 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import WishlistItem, addWishlist
+from .models import WishlistItem, addWishlist, Mood
 from django.views.decorators.csrf import csrf_exempt
 from landingPage.models import Books
 from django.core import serializers
-from wishlist_page.forms import BookForm
+from wishlist_page.forms import BookForm, MoodForm
 from wishlist_page.models import newWishlist
 
 @login_required
@@ -52,6 +52,18 @@ def create_notes(request):
     context = {'form': form}
     return render(request, "create_notes.html", context)
 
+# fungsi mengubah target
+@csrf_exempt
+def update_mood_ajax(request):
+    form = MoodForm(request.POST or None)
+    if request.method == 'POST':
+        notes = form.save(commit=False)
+        notes.user = request.user
+        notes.save()
+
+        if form.is_valid():
+            return HttpResponse(form.instance.mood, status=201)
+    return HttpResponseNotFound()
 
 # fungsi untuk menambahkan buku ke wishlist
 def add_to_wishlist(request):

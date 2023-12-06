@@ -107,6 +107,44 @@
                 Tambahkan wishlist secara manual
             </a>
         </div>
+
+        <div class="user_information">   
+            {% if user_mood %}
+                <p id="moodContent">
+                    <strong>{{ user_mood }}</strong>
+                </p>
+            {% else %}
+                <p id="moodContent">
+                    <strong>Mood is empty, please update your mood.</strong>
+                </p>
+            {% endif %}
+        </div>
+        <button class="edit-button" data-toggle="modal" data-target="#editMoodModal" id="editMoodButton">
+            Edit
+        </button>
+
+        <div class="modal fade" id="editMoodModal" tabindex="-1" aria-labelledby="editMoodModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="editMoodModalLabel">Edit Mood</h1>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="MoodForm" onsubmit="updateMood(); return false;">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="moodTextarea" class="col-form-label">Mood:</label>
+                                <textarea class="form-control" id="moodTextarea" name="Mood"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         
     {% load static %}
     <script src="{% static 'script.js' %}"></script>
@@ -204,6 +242,31 @@
                     myModal.hide();
                 });
             }
+
+        function updateMood() {
+            const form = document.getElementById("MoodForm");
+            const formData = new FormData(form);
+        
+            fetch("{% url 'wishlist_page:update_mood_ajax' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                },
+                body: formData,
+            })
+            .then(response => response.text())  
+            .then(mood => {
+                if (mood) {
+                    document.getElementById("moodContent").innerHTML = `<strong>${mood}</strong>`;  // Update the bio in the DOM
+                    $('#editMoodModal').modal('hide');  // Hide the modal
+                } else {
+                    throw new Error("Failed to update mood");
+                }
+                console.log("hmm")
+                
+            })
+            .catch(error => console.error("Error:", error));
+        }
 
     </script>
 </body>
