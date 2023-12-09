@@ -131,5 +131,5 @@ def add_book_ajax(request):
     return HttpResponseNotFound()
 
 def show_json(request):
-    data = addWishlist.objects.all()
+    data = WishlistItem.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
