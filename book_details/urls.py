@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import books_details,create_comment,get_comments,delete_comment, get_replies, replies, create_reply,delete_reply,donate,delete_book_all,edit_comment,edit_reply
+from .views import discussion_show_json
 
 app_name = 'book_details'
 
@@ -18,4 +19,7 @@ urlpatterns = [
 
     path('edit-comment/<int:book_id>/<int:comment_id>', edit_comment, name='edit_comment'),
     path('comments/edit-reply/<int:comment_id>/<int:reply_id>', edit_reply, name='edit_reply'),
+
+    path('discussions/json', discussion_show_json, name='discussion_show_json'),
+    
 ]

@@ -74,6 +74,21 @@ def get_wishlist_json(request):
     wishlist = WishlistItem.objects.all()
     return HttpResponse(serializers.serialize("json", wishlist))
 
+def get_allusers_mobile(request):
+    users = User.objects.all()
+    user_data = []
+    for user in users:
+        user_data.append({
+            'id': user.pk,
+            'username': user.username,
+            'role': user.groups.first().name if user.groups.exists() else None,
+        })
+    response_data = {
+        'users': user_data
+    }
+
+    return JsonResponse(response_data, safe=False)
+
 @csrf_exempt
 @require_http_methods(['DELETE'])
 def reject_wishlist(request, id):
