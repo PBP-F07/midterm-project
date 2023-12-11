@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import show_main, get_wishlist_json, show_json, reject_wishlist, add_catalog, get_allbooks_json, show_userpage, show_managebooks, get_book_by_title, delete_book, show_notes
+from .views import show_main, get_wishlist_json, show_json, reject_wishlist, add_catalog, get_allbooks_json, show_userpage, show_managebooks, get_book_by_title, delete_book, show_notes, get_allusers_mobile
 
 app_name = 'admin_page'
 
@@ -15,4 +15,5 @@ urlpatterns = [
     path('reject-wishlist/<int:id>', reject_wishlist, name='reject_wishlist'),
     path('add-catalog/<int:id>', add_catalog, name='add_catalog'),
     path('managebooks/delete-book/<int:id>', delete_book, name='delete_book'),
+    path('get-allusers/', get_allusers_mobile, name='get_allusers')
 ]
