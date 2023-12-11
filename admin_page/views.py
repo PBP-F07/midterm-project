@@ -76,28 +76,18 @@ def get_wishlist_json(request):
 
 def get_allusers_mobile(request):
     users = User.objects.all()
-    
-    users_list = []
+    user_data = []
     for user in users:
-        user_data = {
+        user_data.append({
+            'id': user.pk,
             'username': user.username,
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            # Add other user attributes as needed
-        }
-        users_list.append(user_data)
-    
-    user_groups = {}
-    for user in users:
-        user_groups[user.username] = [group.name for group in user.groups.all()]
-    
-    data = {
-        'users': users_list,
-        'user_groups': user_groups
+            'role': user.groups.first().name if user.groups.exists() else None,
+        })
+    response_data = {
+        'users': user_data
     }
 
-    return JsonResponse(data)
+    return JsonResponse(response_data, safe=False)
 
 @csrf_exempt
 @require_http_methods(['DELETE'])
