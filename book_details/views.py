@@ -117,3 +117,10 @@ def edit_reply(request, comment_id, reply_id):
     
     context = {'form': form}
     return render(request, "edit_reply.html", context)
+
+
+#Fungsi dibawah ini untuk kepentingan flutter
+@csrf_exempt
+def discussion_show_json(request):
+    data = discussion.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
