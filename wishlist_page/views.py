@@ -1,3 +1,4 @@
+import json
 import requests
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
@@ -54,6 +55,28 @@ def create_notes(request):
     context = {'form': form}
     return render(request, "create_notes.html", context)
 
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_product = WishlistItem.objects.create(
+            user = request.user,
+            title = data["title"],
+            author = data["author"],
+            description = data["description"],
+            image = data["image"],
+            year_of_release = data["year_of_release"],
+        
+        )
+
+        new_product.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
 # fungsi mengubah target
 @csrf_exempt
 def update_mood_ajax(request):
