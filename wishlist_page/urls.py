@@ -15,5 +15,5 @@ urlpatterns = [
     path('create-notes', create_notes, name='create_notes'),
     path('update-mood-ajax/', update_mood_ajax, name='update_mood_ajax'),
     path('create-flutter/', create_product_flutter, name='create_product_flutter'),
-    path('delete-flutter/', delete_product_flutter, name='delete_product_flutter'),
+    path('delete-flutter/<int:id>/', delete_product_flutter, name='delete_product_flutter'),
 ]
