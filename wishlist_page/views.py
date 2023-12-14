@@ -134,7 +134,21 @@ def delete_item_ajax(request, id):
         product = WishlistItem.objects.get(id=id, user=request.user)
         product.delete()
         return HttpResponse(b"CREATED", status=201)
-    
+
+@csrf_exempt
+def delete_product_flutter(request, id):
+    if request.method == 'DELETE':
+        try:
+            product = WishlistItem.objects.get(id=id, user=request.user)
+            product.delete()
+            return JsonResponse({'message': 'Product deleted'}, status=204)
+        except WishlistItem.DoesNotExist:
+            return JsonResponse({'error': 'Product not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
 # fungsi untuk menambah buku dengan AJAX
 @csrf_exempt
 def add_book_ajax(request):
