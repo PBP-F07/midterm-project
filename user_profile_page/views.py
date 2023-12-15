@@ -58,7 +58,7 @@ def show_json(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_json_books(request):
-    data = Books.objects.filter(user=request.user)
+    data = Books.objects.filter(borrowed_by=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def get_user_profile_json(request):
@@ -98,8 +98,7 @@ def borrowed_book_check_render(request):
 
 def get_borrowed_books_json(request):
     if request.user.is_authenticated:
-        ##borrowed_books = Books.objects.filter(borrowed_by=request.user)
-        borrowed_books = Books.objects.all()
+        borrowed_books = Books.objects.filter(borrowed_by=request.user)
         data = serializers.serialize('json', borrowed_books)
         struct = json.loads(data)
         return JsonResponse(struct, safe=False)
