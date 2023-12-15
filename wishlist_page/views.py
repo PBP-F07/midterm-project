@@ -1,3 +1,4 @@
+import json
 import requests
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
@@ -54,6 +55,28 @@ def create_notes(request):
     context = {'form': form}
     return render(request, "create_notes.html", context)
 
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_product = WishlistItem.objects.create(
+            user = request.user,
+            title = data["title"],
+            author = data["author"],
+            description = data["description"],
+            image = data["image"],
+            year_of_release = data["year_of_release"],
+        
+        )
+
+        new_product.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
 # fungsi mengubah target
 @csrf_exempt
 def update_mood_ajax(request):
@@ -111,7 +134,21 @@ def delete_item_ajax(request, id):
         product = WishlistItem.objects.get(id=id, user=request.user)
         product.delete()
         return HttpResponse(b"CREATED", status=201)
-    
+
+@csrf_exempt
+def delete_product_flutter(request, id):
+    if request.method == 'DELETE':
+        try:
+            product = WishlistItem.objects.get(id=id, user=request.user)
+            product.delete()
+            return JsonResponse({'message': 'Product deleted'}, status=204)
+        except WishlistItem.DoesNotExist:
+            return JsonResponse({'error': 'Product not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
 # fungsi untuk menambah buku dengan AJAX
 @csrf_exempt
 def add_book_ajax(request):
@@ -131,5 +168,5 @@ def add_book_ajax(request):
     return HttpResponseNotFound()
 
 def show_json(request):
-    data = WishlistItem.objects.all()
+    data = WishlistItem.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")

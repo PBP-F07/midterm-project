@@ -1,5 +1,5 @@
 from django.urls import path
-from wishlist_page.views import search_books, add_to_wishlist, load_wishlist, delete_item_ajax, show_json, add_book_ajax, create_notes, update_mood_ajax
+from wishlist_page.views import create_product_flutter, search_books, add_to_wishlist, load_wishlist, delete_item_ajax, show_json, add_book_ajax, delete_product_flutter, create_notes, update_mood_ajax
 from landingPage.views import get_books_json  
 
 app_name = 'wishlist_page'
@@ -14,4 +14,6 @@ urlpatterns = [
     path('add-book-ajax/', add_book_ajax, name='add_book_ajax'),
     path('create-notes', create_notes, name='create_notes'),
     path('update-mood-ajax/', update_mood_ajax, name='update_mood_ajax'),
+    path('create-flutter/', create_product_flutter, name='create_product_flutter'),
+    path('delete-flutter/<int:id>/', delete_product_flutter, name='delete_product_flutter'),
 ]
