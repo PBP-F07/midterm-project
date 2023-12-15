@@ -53,6 +53,34 @@ def load_borrowed_book(request):
     else:
         return JsonResponse({'books': []})
     
+def show_json(request):
+    data = Member.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_books(request):
+    data = Books.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def get_user_profile_json(request):
+    user = request.user
+    if user.is_authenticated:
+        data = Member.objects.filter(user=user)
+    else:   
+        data = []
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_by_id(request, id):
+    data = Member.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_books_by_id(request, id):
+    data = Books.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def fetch_username(request):
+    user = request.user
+    return JsonResponse({"username": user.username, 'status':True}, status=200)
+    
 def borrowed_book_check_render(request):
     user_info = request.user
     member, created = Member.objects.get_or_create(user=user_info)
@@ -70,11 +98,23 @@ def borrowed_book_check_render(request):
 
 def get_borrowed_books_json(request):
     if request.user.is_authenticated:
-        borrowed_books = Books.objects.filter(borrowed_by=request.user)
+        ##borrowed_books = Books.objects.filter(borrowed_by=request.user)
+        borrowed_books = Books.objects.all()
         data = serializers.serialize('json', borrowed_books)
         struct = json.loads(data)
         return JsonResponse(struct, safe=False)
     
+@csrf_exempt
+def get_books(request):
+    user = request.user
+    if user.is_authenticated:
+        data = Books.objects.filter(user=user)
+        # Rest of your code
+    else:   
+        # Handle the case when the user is not authenticated
+        data = []
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+   
 def get_wishlisted_books_json(request):
     if request.user.is_authenticated:
         wishlisted_books = WishlistItem.objects.filter(user=request.user)
