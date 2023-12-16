@@ -75,6 +75,10 @@ def show_json_books(request):
     data = Books.objects.filter(borrowed_by=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+def show_json_wishlist(request):
+    data = WishlistItem.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
 def get_user_profile_json(request):
     user = request.user
     if user.is_authenticated:
