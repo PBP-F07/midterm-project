@@ -53,20 +53,6 @@ def load_borrowed_book(request):
     else:
         return JsonResponse({'books': []})
     
-@csrf_exempt
-def return_book_flutter(request, id):
-    if request.method == 'DELETE':
-        try:
-            product = Books.objects.get(id=id, borrowed_by=request.user)
-            product.delete()
-            return JsonResponse({'message': 'Book has been returned'}, status=204)
-        except WishlistItem.DoesNotExist:
-            return JsonResponse({'error': 'Book not found'}, status=404)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
-    
 def show_json(request):
     data = Member.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
@@ -168,5 +154,22 @@ def return_book(request, id):
         book.amount = book.amount+1
         book.save()
         return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully', 'is_borrowed': 'Borrowed'})
+
+@csrf_exempt
+def return_book_flutter(request, id):
+    if request.method == 'POST':
+        try:
+            book = Books.objects.get(pk=id, borrowed_by=request.user);
+            book.borrowed_by = None
+            book.borrowed_date = None  # Reset the borrowed_date
+            book.return_date = None  # Reset the return_date
+            book.amount = book.amount+1
+            book.save()
+            return JsonResponse({'message': 'Book has been returned'}, status=204)
+        except WishlistItem.DoesNotExist:
+            return JsonResponse({'error': 'Book not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 

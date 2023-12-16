@@ -19,7 +19,6 @@ urlpatterns = [
     path('return-book-flutter/<int:id>/', return_book_flutter, name='return_book_flutter'),
     path('json-books/', show_json_books, name='show_json'),
     path('json-wishlist/', show_json_wishlist, name='show_json_wishlist'),
-
     path('json-books/<int:id>/', show_json_books_by_id, name='show_json'),
     path('get-user-profile-json/', get_user_profile_json, name='get_user_item_json'),
     path('fetch-username/', fetch_username, name='fetch_username'),
