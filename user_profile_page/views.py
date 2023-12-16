@@ -159,7 +159,7 @@ def return_book(request, id):
 def return_book_flutter(request, id):
     if request.method == 'POST':
         try:
-            book = Books.objects.get(pk=id, borrowed_by=request.user);
+            book = Books.objects.get(pk=id);
             book.borrowed_by = None
             book.borrowed_date = None  # Reset the borrowed_date
             book.return_date = None  # Reset the return_date
@@ -170,6 +170,7 @@ def return_book_flutter(request, id):
             return JsonResponse({'error': 'Book not found'}, status=404)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
