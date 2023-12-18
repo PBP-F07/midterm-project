@@ -172,5 +172,16 @@ def return_book_flutter(request, id):
             return JsonResponse({'error': str(e)}, status=500)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
+@csrf_exempt
+def get_user_info_json(request):
+    user = request.user
+    if user.is_authenticated:
+        username = user.username
+        bio = user.bio
+        return JsonResponse({'username':username,
+                             'bio': bio, 'status':True}, status = 200)
+    else:
+        return JsonResponse({'status':False}, status = 401)
 
 
