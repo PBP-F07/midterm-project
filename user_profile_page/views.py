@@ -175,13 +175,13 @@ def return_book_flutter(request, id):
     
 @csrf_exempt
 def get_user_info_json(request):
-    user = request.user
-    if user.is_authenticated:
-        username = user.username
-        bio = user.bio
-        return JsonResponse({'username':username,
-                             'bio': bio, 'status':True}, status = 200)
+    if request.method =='GET':
+        user = request.user
+        member, created = Member.objects.get_or_create(user=user)
+        user_bio = member.bio
+        return JsonResponse({'username':user.username,
+                                'bio': user_bio, 'status':True}, status = 200)
     else:
-        return JsonResponse({'status':False}, status = 401)
+        return JsonResponse({'status':False}, status = 400)   
 
 
