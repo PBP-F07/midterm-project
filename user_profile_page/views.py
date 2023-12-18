@@ -36,6 +36,24 @@ def user_dashboard(request):
 
     return render(request, 'main_dashboard.html', context)
 
+@login_required
+def get_user_info_json(request):
+    # Assuming the Member instance is related to the current user
+    current_member = Member.objects.get(user=request.user)
+
+    # Get username and bio
+    username = current_member.user.username
+    bio = current_member.bio
+
+    # Create a dictionary to hold the information
+    member_info = {
+        'username': username,
+        'bio': bio,
+    }
+
+    # Return the information as JSON response
+    return JsonResponse(member_info, response = 200)
+
 def load_wishlist(request):
     if request.user.is_authenticated:
         wishlist_items = WishlistItem.objects.filter(user=request.user)
@@ -171,17 +189,6 @@ def return_book_flutter(request, id):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
-    
-@csrf_exempt
-def get_user_info_json(request):
-    if request.method =='GET':
-        user = request.user
-        member, created = Member.objects.get_or_create(user=user)
-        user_bio = member.bio
-        return JsonResponse({'username':user.username,
-                                'bio': user_bio, 'status':True}, status = 200)
-    else:
-        return JsonResponse({'status':False}, status = 400)   
+        return JsonResponse({'error': 'Invalid request method'}, status=400) 
 
 
