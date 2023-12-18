@@ -45,8 +45,11 @@ def get_user_info_json(request):
     username = current_member.user.username
     bio = current_member.bio
 
-    # Return the information as JSON response
-    return JsonResponse({'username':username, 'bio':bio}, status=200)
+    # Convert the information to JSON
+    user_info = json.dumps({'username':username, 'bio':bio})
+
+    # Return the information as HttpResponse
+    return HttpResponse(user_info, content_type='application/json', status=200)
 
 
 def load_wishlist(request):
