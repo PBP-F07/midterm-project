@@ -36,21 +36,6 @@ def user_dashboard(request):
 
     return render(request, 'main_dashboard.html', context)
 
-@login_required
-def get_user_info_json(request):
-    # Assuming the Member instance is related to the current user
-    current_member = Member.objects.get(user=request.user)
-
-    # Get username and bio
-    username = current_member.user.username
-    bio = current_member.bio
-
-    # Convert the information to JSON
-    user_info = json.dumps({'username':username, 'bio':bio})
-
-    # Return the information as HttpResponse
-    return HttpResponse(user_info, content_type='application/json', status=200)
-
 
 def load_wishlist(request):
     if request.user.is_authenticated:
@@ -80,6 +65,20 @@ def show_json_books(request):
 def show_json_wishlist(request):
     data = WishlistItem.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def get_user_info_json(request):
+    # Assuming the Member instance is related to the current user
+    current_member = Member.objects.get(user=request.user)
+
+    # Get username and bio
+    username = current_member.user.username
+    bio = current_member.bio
+
+    # Convert the information to JSON
+    user_info = json.dumps({'username':username, 'bio':bio})
+
+    # Return the information as HttpResponse
+    return HttpResponse(user_info, content_type='application/json', status=200)
 
 def get_user_profile_json(request):
     user = request.user
