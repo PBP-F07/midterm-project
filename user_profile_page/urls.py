@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from user_profile_page.views import load_wishlist, get_borrowed_books_json, get_wishlisted_books_json, delete_all_books, show_json_by_id, show_json, show_json_books, show_json_books_by_id, get_user_profile_json, fetch_username, get_books, return_book_flutter, show_json_wishlist
+from user_profile_page.views import load_wishlist, get_borrowed_books_json, get_wishlisted_books_json, delete_all_books, show_json_by_id, show_json, show_json_books, show_json_books_by_id, get_user_profile_json, fetch_username, get_books, return_book_flutter, show_json_wishlist, get_user_info_json
 
 app_name = 'user_profile_page'
 
@@ -23,5 +23,7 @@ urlpatterns = [
     path('get-user-profile-json/', get_user_profile_json, name='get_user_item_json'),
     path('fetch-username/', fetch_username, name='fetch_username'),
     path('get-books/', get_books, name='get_books'),
+    path('get-user-info/', get_user_info_json, name='get-user-info'),
+
 
 ]
