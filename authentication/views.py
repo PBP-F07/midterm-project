@@ -131,6 +131,8 @@ def register_mobile(request):
             return JsonResponse({'status': 'failed', 'message': 'Gagal membuat akun'})
 
         new_user = User.objects.create_user(username = username, password = password1)
+        group = Group.objects.get(name='member')
+        new_user.groups.add(group)
         new_user.save()
         return JsonResponse({"status": "success"}, status=200)
     else:
