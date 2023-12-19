@@ -93,11 +93,16 @@ def login_mobile(request):
     if user is not None:
         if user.is_active:
             login(request, user)
+
+            # Retrieve user's group information
+            user_group = user.groups.first() if user.groups.exists() else None
+
             # Status login sukses.
             return JsonResponse({
                 "username": user.username,
                 "status": True,
-                "message": "Login sukses!"
+                "message": "Login sukses!",
+                "group": user_group.name if user_group else None
                 # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
             }, status=200)
         else:
