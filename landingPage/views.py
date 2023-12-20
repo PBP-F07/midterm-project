@@ -94,6 +94,19 @@ def show_json_by_id(request, id):
     data = Books.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+def borrow_book_flutter(request, id):
+    if request.method == 'POST':
+        book = Books.objects.get(pk=id)
+        if book.borrowed_by:
+            return JsonResponse({'status': 'error', 'message': 'Someone has borrowed the book'}, status=404)
+        # Retrieve user information from the POST request and update the book
+        book.borrowed_by = request.user
+        book.borrowed_date = date.today()  # Save the current date as borrowed_date
+        book.is_borrowed = "Borrowed"
+        book.amount = book.amount-1
+        book.save()
+        return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully'})
+
 @csrf_exempt
 def borrow_book(request, id):
     if request.method == 'POST':
