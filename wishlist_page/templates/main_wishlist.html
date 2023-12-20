@@ -101,13 +101,6 @@
             </div>
           </div>
 
-        <div class="add-manual" style="text-align: center;">
-            <h4>Belum menemukan bukumu? Kirimkan permintaan ke LiteraPhile</h4>
-            <a href="{% url 'wishlist_page:create_notes' %}" class="btn btn-outline-info" style="color: #FFFFFF; outline-color: #273a7d; border-color: #273a7d; background-color: #273a7d; display: block; text-align: center; line-height: 2; width: 500px; margin: 0 auto; margin-bottom: 50px;">
-                Tambahkan wishlist secara manual
-            </a>
-        </div>
-
         <div class="user_information">   
             {% if user_mood %}
                 <p id="moodContent">
@@ -212,8 +205,6 @@
                             <tr>
                                 <td>${index + 1}</td>
                                 <td>${item.title}</td>
-                                <td>${item.status}</td>
-                                <td><button type="button" class="btn btn-danger" onclick="deleteProduct(${item.id})">hapus</button></td>
                             </tr>
                         `;
                     });
