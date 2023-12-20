@@ -180,4 +180,38 @@ def create_reply_flutter(request,id):
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+def edit_discussion_flutter(request,id):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+        format = "%H %d-%m-%Y "
+
+        new_discussion = discussion.objects.get(pk=id)
+        new_discussion.comment = data["discussion"]
+        new_discussion.date_added = datetime.datetime.now().strftime(format)
+
+        new_discussion.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+def edit_reply_flutter(request,id):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+        format = "%H %d-%m-%Y "
+
+        new_reply = reply.objects.get(pk=id)
+        new_reply.replies = data["replies"]
+        new_reply.date_add = datetime.datetime.now().strftime(format)
+        
+        new_reply.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
 

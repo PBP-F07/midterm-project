@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import books_details,create_comment,get_comments,delete_comment, get_replies, replies, create_reply,delete_reply,donate,delete_book_all,edit_comment,edit_reply
-from .views import discussion_show_json, discussion_json, reply_show_json, reply_json, create_discussion_flutter, create_reply_flutter
+from .views import discussion_show_json, discussion_json, reply_show_json, reply_json, create_discussion_flutter, create_reply_flutter, edit_discussion_flutter,edit_reply_flutter
 app_name = 'book_details'
 
 urlpatterns = [
@@ -24,6 +24,7 @@ urlpatterns = [
     path('replies/json', reply_show_json, name='replies_show_json'),
     path('replies/<int:id>/json/', reply_json, name="reply_json" ),
     path('create-discussion-flutter/<int:id>', create_discussion_flutter, name='create_discussion_flutter'),
-    path('create-reply-flutter/<int:id>', create_reply_flutter, name='create_reply_flutter')
-
+    path('create-reply-flutter/<int:id>', create_reply_flutter, name='create_reply_flutter'),
+    path('edit-discussion-flutter/<int:id>', edit_discussion_flutter, name='edit_discussion_flutter'),
+    path('edit-reply-flutter/<int:id>', edit_reply_flutter, name='edit_reply_flutter'),
 ]
