@@ -8,6 +8,8 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import datetime
 from .forms import CommentForm,ReplyForm
+import json
+from django.http import JsonResponse
 
 @login_required(login_url='')
 def books_details(request,id):
@@ -124,3 +126,92 @@ def edit_reply(request, comment_id, reply_id):
 def discussion_show_json(request):
     data = discussion.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def discussion_json(request,id):
+    book = discussion.objects.filter(book_id=id)
+    return HttpResponse(serializers.serialize("json", book), content_type="application/json")
+
+@csrf_exempt
+def reply_show_json(request):
+    comments = reply.objects.all()
+    return HttpResponse(serializers.serialize("json", comments), content_type="application/json")
+
+def reply_json(request,id):
+    replies = reply.objects.filter(comment_id=id)
+    return HttpResponse(serializers.serialize("json", replies), content_type="application/json")
+
+@csrf_exempt
+def create_discussion_flutter(request,id):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+        format = "%H %d-%m-%Y "
+
+        new_discussion = discussion.objects.create(
+            user = request.user.username,
+            comment = data["discussion"],
+            date_added = datetime.datetime.now().strftime(format),
+            book = Books.objects.filter(pk=id)[0]
+        )
+
+        new_discussion.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+
+@csrf_exempt
+def create_reply_flutter(request,id):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+        format = "%H %d-%m-%Y "
+
+        new_reply = reply.objects.create(
+            user = request.user.username,
+            comment = discussion.objects.filter(pk=id)[0],
+            date_add = datetime.datetime.now().strftime(format),
+            replies = data["replies"],
+        )
+
+        new_reply.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+def edit_discussion_flutter(request,id):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+        format = "%H %d-%m-%Y "
+
+        new_discussion = discussion.objects.get(pk=id)
+        new_discussion.comment = data["discussion"]
+        new_discussion.date_added = datetime.datetime.now().strftime(format)
+
+        new_discussion.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+def edit_reply_flutter(request,id):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+        format = "%H %d-%m-%Y "
+
+        new_reply = reply.objects.get(pk=id)
+        new_reply.replies = data["replies"]
+        new_reply.date_add = datetime.datetime.now().strftime(format)
+        
+        new_reply.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+

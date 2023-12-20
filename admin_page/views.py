@@ -89,6 +89,16 @@ def get_allusers_mobile(request):
 
     return JsonResponse(response_data, safe=False)
 
+def get_wishlist_mobile(request):
+    wishlist = WishlistItem.objects.all()
+    wishlist_json = serializers.serialize('json', wishlist)
+    return JsonResponse({'wishlist': wishlist_json}, safe=False)
+
+def get_allbooks_mobile(request):
+    books = Books.objects.all()
+    books_json = serializers.serialize('json', books)
+    return JsonResponse({'books': books_json}, safe=False)
+
 @csrf_exempt
 @require_http_methods(['DELETE'])
 def reject_wishlist(request, id):
@@ -136,3 +146,11 @@ def get_book_by_title(request):
         })
 
     return JsonResponse(book_data, safe=False)
+
+@require_http_methods(['GET'])
+def get_book_by_title_mobile(request):
+    title = request.GET.get('title', '')
+    books = Books.objects.filter(title__icontains=title)
+
+    search_json = serializers.serialize('json', books)
+    return JsonResponse({'books': search_json}, safe=False) 

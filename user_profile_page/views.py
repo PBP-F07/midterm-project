@@ -36,6 +36,7 @@ def user_dashboard(request):
 
     return render(request, 'main_dashboard.html', context)
 
+
 def load_wishlist(request):
     if request.user.is_authenticated:
         wishlist_items = WishlistItem.objects.filter(user=request.user)
@@ -52,6 +53,52 @@ def load_borrowed_book(request):
         return JsonResponse({'books': books_data})
     else:
         return JsonResponse({'books': []})
+    
+def show_json(request):
+    data = Member.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_books(request):
+    data = Books.objects.filter(borrowed_by=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_wishlist(request):
+    data = WishlistItem.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def get_user_info_json(request):
+    # Assuming the Member instance is related to the current user
+    current_member = Member.objects.get(user=request.user)
+
+    # Get username and bio
+    username = current_member.user.username
+    bio = current_member.bio
+
+    # Convert the information to JSON
+    user_info = json.dumps({'username':username, 'bio':bio})
+
+    # Return the information as HttpResponse
+    return HttpResponse(user_info, content_type='application/json', status=200)
+
+def get_user_profile_json(request):
+    user = request.user
+    if user.is_authenticated:
+        data = Member.objects.filter(user=user)
+    else:   
+        data = []
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_by_id(request, id):
+    data = Member.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_books_by_id(request, id):
+    data = Books.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def fetch_username(request):
+    user = request.user
+    return JsonResponse({"username": user.username, 'status':True}, status=200)
     
 def borrowed_book_check_render(request):
     user_info = request.user
@@ -75,6 +122,17 @@ def get_borrowed_books_json(request):
         struct = json.loads(data)
         return JsonResponse(struct, safe=False)
     
+@csrf_exempt
+def get_books(request):
+    user = request.user
+    if user.is_authenticated:
+        data = Books.objects.filter(user=user)
+        # Rest of your code
+    else:   
+        # Handle the case when the user is not authenticated
+        data = []
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+   
 def get_wishlisted_books_json(request):
     if request.user.is_authenticated:
         wishlisted_books = WishlistItem.objects.filter(user=request.user)
@@ -111,5 +169,23 @@ def return_book(request, id):
         book.amount = book.amount+1
         book.save()
         return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully', 'is_borrowed': 'Borrowed'})
+
+@csrf_exempt
+def return_book_flutter(request, id):
+    if request.method == 'POST':
+        try:
+            book = Books.objects.get(pk=id);
+            book.borrowed_by = None
+            book.borrowed_date = None  # Reset the borrowed_date
+            book.return_date = None  # Reset the return_date
+            book.amount = book.amount+1
+            book.save()
+            return JsonResponse({'message': 'Book has been returned'}, status=204)
+        except WishlistItem.DoesNotExist:
+            return JsonResponse({'error': 'Book not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400) 
 
 
