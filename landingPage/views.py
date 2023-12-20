@@ -119,4 +119,7 @@ def borrow_book(request, id):
         book.is_borrowed = "Borrowed"
         book.amount = book.amount-1
         book.save()
-        return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully'})
+        return JsonResponse({'status': 'success', 'message': 'Book borrowed successfully'}, status=204)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400) 
+  
