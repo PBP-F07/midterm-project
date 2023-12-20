@@ -101,21 +101,6 @@
             </div>
           </div>
 
-        <div class="user_information">   
-            {% if user_mood %}
-                <p id="moodContent">
-                    <strong>{{ user_mood }}</strong>
-                </p>
-            {% else %}
-                <p id="moodContent">
-                    <strong>Mood is empty, please update your mood.</strong>
-                </p>
-            {% endif %}
-        </div>
-        <button class="edit-button" data-toggle="modal" data-target="#editMoodModal" id="editMoodButton">
-            Edit
-        </button>
-
         <div class="modal fade" id="editMoodModal" tabindex="-1" aria-labelledby="editMoodModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
